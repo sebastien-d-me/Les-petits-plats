@@ -34,6 +34,9 @@ body {
   padding: 25px 20px;
   width: 100%;
 }
+#champ-rechercher:placeholder-shown {
+  text-overflow: ellipsis;
+}
 #champ-rechercher::-webkit-search-cancel-button {
   display: none;
 }
@@ -194,7 +197,7 @@ body {
 /* Liste d'ingrédient */
 .liste-ingredient {
   float: left;
-  margin: 20px 50px 0 0;
+  margin: 20px 10px 0 0;
 }
 /* Type d'ingrédient */
 .type-ingredient {
@@ -214,4 +217,169 @@ body {
   margin: 20px 0 0 0;
   text-align: justify;
   text-overflow: ellipsis;
+}
+
+/** Responsive **/
+/* 1600 */
+@media screen and (max-width: 1600px) {
+  /** Base **/
+  html,
+  body {
+    margin: 20px 50px;
+  }
+  /** Plats **/
+  /* Liste d'ingrédient */
+  .liste-ingredient {
+    float: unset;
+  }
+  /* Titre du plat */
+  .titre-plat {
+    font-size: 18px;
+  }
+  /* Temps de préparation */
+  .temps-preparation {
+    font-size: 16px;
+  }
+  .temps-preparation::before {
+    font-size: 15px;
+  }
+}
+/* 1400 */
+@media screen and (max-width: 1400px) {
+  /** Base **/
+  html,
+  body {
+    margin: 20px 25px;
+  }
+  /** Plats **/
+  /* Titre du plat */
+  .titre-plat {
+    font-size: 16px;
+  }
+  /* Temps de préparation */
+  .temps-preparation {
+    font-size: 15px;
+  }
+  .temps-preparation::before {
+    font-size: 14px;
+  }
+  /* Type d'ingrédient */
+  .type-ingredient {
+    font-size: 14px;
+  }
+  /* Recette */
+  .recette > p {
+    font-size: 14px;
+  }
+}
+/* 1250 */
+@media screen and (max-width: 1250px) {
+  /** Base **/
+  html,
+  body {
+    margin: 20px 10px;
+  }
+  /** Plats **/
+  /* Liste des plats */
+  #liste-plats {
+    gap: 25px;
+  }
+  .plat {
+    flex: 1 0 calc((100% - 100px) / 2);
+  }
+  /* Titre du plat */
+  .titre-plat {
+    font-size: 20px;
+  }
+  /* Temps de préparation */
+  .temps-preparation {
+    font-size: 18px;
+  }
+  .temps-preparation::before {
+    font-size: 17px;
+  }
+  /* Type d'ingrédient */
+  .type-ingredient {
+    font-size: 16px;
+  }
+  /* Recette */
+  .recette > p {
+    font-size: 16px;
+  }
+}
+/* 992 */
+@media screen and (max-width: 992px) {
+  /** Filtres **/
+  #filtre {
+    justify-content: center;
+  }
+  /* Cherche dans les filtres */
+  .cherche-filtre {
+    margin-right: 0;
+    width: auto;
+  }
+  /** Plats **/
+  /* Liste des plats */
+  #liste-plats {
+    gap: 25px 0;
+  }
+  .plat {
+    flex: 1 0 calc((100% - 100px) / 1);
+  }
+}
+/* 850 */
+@media screen and (max-width: 850px) {
+  /** Formulaire **/
+  /* Rechercher */
+  #champ-rechercher {
+    font-size: 16px;
+  }
+  /** Filtres **/
+  #filtre {
+    flex-direction: column;
+  }
+  /* Type de filtre */
+  .type-filtre {
+    display: block;
+    margin: 10px auto;
+    width: fit-content;
+  }
+  /* Boutons */
+  .btn-filtre {
+    margin-right: unset;
+  }
+}
+/* 600 */
+@media screen and (max-width: 600px) {
+  /** Header **/
+  /* Logo */
+  .logo {
+    width: 268px;
+  }
+  /** Formulaire **/
+  /* Rechercher */
+  #champ-rechercher {
+    font-size: 14px;
+  }
+  #champ-rechercher::-webkit-search-cancel-button {
+    display: block;
+  }
+  .fa-search {
+    display: none;
+  }
+}
+/* 425 */
+@media screen and (max-width: 425px) {
+  /** Base **/
+  html,
+  body {
+    margin: 20px 5px;
+  }
+  /** Plats **/
+  /* Temps de préparation */
+  .temps-preparation {
+    display: block;
+    float: unset;
+    margin-top: 5px;
+  }
 }
