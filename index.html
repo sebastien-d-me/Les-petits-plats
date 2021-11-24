@@ -26,21 +26,9 @@
                 <button class="btn-filtre" id="btn-ingredients" onclick="ouvreFiltre('ingredients')">Ingrédients<i class="fas fa-chevron-down chevron-filtre chevron-ferme-filtre"></i></button>
                 <div class="cherche-filtre" id="cherche-ingredients">
                     <form method="GET" action="#">
-                        <input type="text" class="champ-filtre" id="champ-ingredients" placeholder="Rechercher un appareil"><i class="fas fa-chevron-up chevron-filtre chevron-ouvert-filtre" onclick="fermetureFiltre('ingredients')"></i>
+                        <input type="text" class="champ-filtre" id="champ-ingredients" placeholder="Rechercher un ingrédient"><i class="fas fa-chevron-up chevron-filtre chevron-ouvert-filtre" onclick="fermetureFiltre('ingredients')"></i>
                     </form>
-                    <ul class="liste-filtre">
-                        <li class="nom-filtre">Lait de coco</li>
-                        <li class="nom-filtre">Sucre</li>
-                        <li class="nom-filtre">Concombre</li>
-                        <li class="nom-filtre">Oignon</li>
-                        <li class="nom-filtre">Maïs</li>
-                        <li class="nom-filtre">Pomme</li>
-                        <li class="nom-filtre">Glaçons</li>
-                        <li class="nom-filtre">Tomate</li>
-                        <li class="nom-filtre">Poulet</li>
-                        <li class="nom-filtre">Vinaigrette</li>
-                        <li class="nom-filtre">Carotte</li>
-                        <li class="nom-filtre">Beurre</li>
+                    <ul class="liste-filtre" id="liste-filtre-ingredients">
                     </ul>
                 </div>
             </div>
@@ -50,13 +38,7 @@
                     <form method="GET" action="#">
                         <input type="text" class="champ-filtre" id="champ-appareils" placeholder="Rechercher un appareil"><i class="fas fa-chevron-up chevron-filtre chevron-ouvert-filtre" onclick="fermetureFiltre('appareils')"></i>
                     </form>
-                    <ul class="liste-filtre">
-                        <li class="nom-filtre">Cuiseur de riz</li>
-                        <li class="nom-filtre">Four</li>
-                        <li class="nom-filtre">Poële à crêpe</li>
-                        <li class="nom-filtre">Blender</li>
-                        <li class="nom-filtre">Sauteuse</li>
-                        <li class="nom-filtre">Mixer</li>
+                    <ul class="liste-filtre" id="liste-filtre-appliance">
                     </ul>
                 </div>
             </div>
@@ -64,19 +46,9 @@
                 <button class="btn-filtre" id="btn-ustensiles" onclick="ouvreFiltre('ustensiles')">Ustensiles<i class="fas fa-chevron-down chevron-filtre chevron-ferme-filtre"></i></button>
                 <div class="cherche-filtre" id="cherche-ustensiles">
                     <form method="GET" action="#">
-                        <input type="text" class="champ-filtre" id="champ-ustensiles" placeholder="Rechercher un appareil"><i class="fas fa-chevron-up chevron-filtre chevron-ouvert-filtre" onclick="fermetureFiltre('ustensiles')"></i>
+                        <input type="text" class="champ-filtre" id="champ-ustensiles" placeholder="Rechercher un ustensile"><i class="fas fa-chevron-up chevron-filtre chevron-ouvert-filtre" onclick="fermetureFiltre('ustensiles')"></i>
                     </form>
-                    <ul class="liste-filtre">
-                        <li class="nom-filtre">Couteau</li>
-                        <li class="nom-filtre">Saladier</li>
-                        <li class="nom-filtre">Passoire</li>
-                        <li class="nom-filtre">Moule à tarte</li>
-                        <li class="nom-filtre">Râpe à fromage</li>
-                        <li class="nom-filtre">Fourchette</li>
-                        <li class="nom-filtre">Casserolle</li>
-                        <li class="nom-filtre">Cuillère en bois</li>
-                        <li class="nom-filtre">Plat à gratin</li>
-                        <li class="nom-filtre">Économe</li>
+                    <ul class="liste-filtre" id="liste-filtre-ustensils">
                     </ul>
                 </div>
             </div>
@@ -193,6 +165,7 @@
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script src="ressources/js/recipes.js"></script>
     <script src="ressources/js/petits_plats.js"></script>
 </body>
 </html>

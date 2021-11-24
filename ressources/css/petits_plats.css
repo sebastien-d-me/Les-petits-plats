@@ -76,6 +76,12 @@ body {
 .btn-filtre:hover {
   cursor: pointer;
 }
+.btn-afficher {
+  display: block;
+}
+.btn-cacher {
+  display: none;
+}
 /* Chevron */
 .chevron-filtre {
   color: #ffffff;
@@ -100,6 +106,12 @@ body {
 }
 .cherche-filtre > form {
   position: relative;
+}
+.cherche-filtre-cacher {
+  display: none;
+}
+.cherche-filtre-afficher {
+  display: flex;
 }
 /* Champs des filtres */
 .champ-filtre {
@@ -127,6 +139,9 @@ body {
 }
 .nom-filtre:hover {
   cursor: pointer;
+}
+.nom-filtre:first-letter {
+  text-transform: capitalize;
 }
 /* Ingrédients */
 #btn-ingredients,
