@@ -31,21 +31,23 @@ function fermetureFiltre(type) {
 /*let recettes = `${recipes.map(recette => `${recette.name}`).join(" ")}`;*/
 
 /** Gère les listes **/
+/* Enlève les accents, la ponctuation et met en minuscule */
 function normalizer(data) {
-    /* Enlève les accents et ponctuation */
     data = data.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    data = data.replace(/[.,\/#!$\^\*;:{}=\`~()]/g,"");
+    data = data.replace(/[.,!;:?]/g,"");
+    data = data.toLowerCase();
     return data;
 }
+/* Récupère la liste des tags */
 function listeTags(type) {
     let liste = [];
-    /* Ajoute dans un tableau les données selon le type en les mettant en minuscule */
+    /* Ajoute dans un tableau les données selon le type */
     recipes.forEach(recipe => {
         switch(type) {
             case "ingredients":
                 `${recipe.ingredients.map(data => 
                     liste.push(normalizer(
-                        `${data.ingredient.toLowerCase()}`
+                        `${data.ingredient}`
                     ))
                 ).join("")}`;
                 break;
@@ -57,7 +59,7 @@ function listeTags(type) {
             case "ustensils":
                 `${recipe.ustensils.map(data => 
                     liste.push(normalizer(
-                        `${data.toLowerCase()}`
+                        `${data}`
                     ))
                 ).join("")}`;
                 break;
@@ -69,7 +71,7 @@ function listeTags(type) {
     liste = liste.sort((a, b) => a.localeCompare(b));
     /* Insert en éliminant les doublons dans le DOM */
     new Set(liste).forEach((data) => {
-        document.getElementById("liste-filtre-"+type).insertAdjacentHTML('beforeend', `<li class="nom-filtre">${data}</li>`);
+        document.getElementById("liste-filtre-"+type).insertAdjacentHTML("beforeend", `<li class="nom-filtre" data-type="${type}" data-nom="${data}" onclick="ajouteTag('${type}', '${data}')">${data}</li>`);
     });
 }
 /* Affiche tous les ingrédients */ 
@@ -78,3 +80,14 @@ listeTags("ingredients");
 listeTags("appliance");
 /* Affiche tous les ustensiles */
 listeTags("ustensils");
+
+/** Gère les tags choisis */
+/* Ajoute le tag dans les tag choisis */
+function ajouteTag(type, nom) {
+    document.getElementById("tags-choisis").insertAdjacentHTML("beforeend", `<span class="tag tag-${type}" id="${type}-${nom}">${nom} <i class="far fa-times-circle" onclick="supprimeTag('${type}-${nom}')"></i></span>`);
+}
+/* Supprime le tag dans les tags choisis */
+function supprimeTag(id) {
+    document.getElementById(id).remove();
+}
+

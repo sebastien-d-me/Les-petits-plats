@@ -49,6 +49,30 @@ body {
   transform: translateY(-50%);
 }
 
+/** Tags choisis **/
+/* Tag */
+.tag {
+  border-radius: 5px;
+  color: #ffffff;
+  display: inline-block;
+  height: 30px;
+  line-height: 30px;
+  min-width: 100px;
+  margin: 0 10px 10px 0;
+  padding: 10px 20px;
+  position: relative;
+  text-transform: capitalize;
+}
+.fa-times-circle {
+  float: right;
+  height: 30px;
+  line-height: 30px;
+  margin-left: 10px;
+}
+.fa-times-circle:hover {
+  cursor: pointer;
+}
+
 /** Filtres **/
 #filtre {
   display: flex;
@@ -146,21 +170,23 @@ body {
 /* Ingrédients */
 #btn-ingredients,
 #cherche-ingredients,
-#champ-ingredients {
+#champ-ingredients,
+.tag-ingredients {
   background-color: #3282f7;
 }
 /* Appareils */
 #btn-appareils,
 #cherche-appareils,
-#champ-appareils {
+#champ-appareils,
+.tag-appliance {
   background-color: #68d9a4;
 }
 /* Ustensiles */
 #btn-ustensiles,
 #cherche-ustensiles,
-#champ-ustensiles {
+#champ-ustensiles,
+.tag-ustensils {
   background-color: #ed6454;
-  margin-right: unset;
 }
 
 /** Plats **/
@@ -178,6 +204,10 @@ body {
 /* Image plat */
 .image-plat {
   background-color: #c7bebe;
+  background-image: url("../img/Logo.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
   border-radius: 5px 5px 0 0;
   height: 200px;
 }
