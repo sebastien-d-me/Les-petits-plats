@@ -55,8 +55,8 @@ body {
   border-radius: 5px;
   color: #ffffff;
   display: inline-block;
-  height: 30px;
   line-height: 30px;
+  min-height: 30px;
   min-width: 100px;
   margin: 0 10px 10px 0;
   padding: 10px 20px;
@@ -354,6 +354,19 @@ body {
 }
 /* 992 */
 @media screen and (max-width: 992px) {
+  /** Tags choisis **/
+  /* Tag */
+  .tag {
+    margin: 5px 0;
+    text-align: center;
+    width: calc(100% - 40px);
+  }
+  .fa-times-circle {
+    display: block;
+    float: unset;
+    font-size: 22px;
+    margin: auto;
+  }
   /** Filtres **/
   #filtre {
     justify-content: center;
