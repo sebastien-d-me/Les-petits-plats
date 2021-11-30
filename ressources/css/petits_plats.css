@@ -200,6 +200,8 @@ body {
   background-color: #e7e7e7;
   border-radius: 0 0 5px 5px;
   flex: 1 0 calc((100% - 100px) / 3);
+  max-width: calc((100% - 100px) / 3);
+  padding-bottom: 15px;
 }
 /* Image plat */
 .image-plat {
@@ -243,6 +245,7 @@ body {
 .liste-ingredient {
   float: left;
   margin: 20px 10px 0 0;
+  width: calc(50% - 10px);
 }
 /* Type d'ingrédient */
 .type-ingredient {
@@ -257,11 +260,19 @@ body {
   content: " : ";
 }
 /* Recette */
+.recette {
+  float: right;
+  width: 50%;
+}
 .recette > p {
-  display: flex;
+  display: -webkit-box;
   margin: 20px 0 0 0;
+  overflow: hidden;
   text-align: justify;
   text-overflow: ellipsis;
+  width: 100%;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
 }
 
 /** Responsive **/
