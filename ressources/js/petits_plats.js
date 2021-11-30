@@ -87,8 +87,8 @@ let tagAppareils = [];
 let tagUstensiles = [];
 
 let listeIDIngredients = [];
-let listeIDAppareils = [];
-let listeIDUstensiles = [];
+/*let listeIDAppareils = [];
+let listeIDUstensiles = [];*/
 /* Récupère les ID par rapport aux tags */
 function idTag(id, type, tag) {
     switch(type) {
@@ -107,7 +107,7 @@ function idTag(id, type, tag) {
                 }
             });
             break;
-        case "appliance":
+        /*case "appliance":
             if(normalizer(recipes[id]["appliance"]) == tag) {
                 let idPlat = recipes[id]["id"];
                 let nomPlat = recipes[id]["name"];
@@ -134,14 +134,17 @@ function idTag(id, type, tag) {
                     return plat(idPlat, nomPlat, personnePlat, ingredientsPlat, tempsPlat, descriptionPlat, appareilsPlat, ustensilesPlat);
                 }
             });
-            break;
+            break;*/
         default:
             break;
     }
 }
+/* SI TABLEAU VIDE ALORS NORMAL SI 2 -> MELANGE TABLEAU ET VERIFIE SI SIMIALIRE -> PAREIL 3 */
+
 /* Ajoute le tag dans les tag choisis */
 function ajouteTag(type, nom) {
     document.getElementById("tags-choisis").insertAdjacentHTML("beforeend", `<span class="tag tag-${type}" id="${type}-${nom}">${nom} <i class="far fa-times-circle" onclick="supprimeTag('${type}-${nom}')"></i></span>`);
+    let plats = document.querySelectorAll(".plat");
     switch(type) {
         case "ingredients":
             /* Récupère l'id de la / des recette(s) possédant cette ingrédient */
@@ -158,24 +161,20 @@ function ajouteTag(type, nom) {
             break;
         case "appliance":
             tagAppareils.push(nom);
-            Object.keys(recipes).map(function idObjet(id) { 
-                tagAppareils.forEach(appliances => {
-                     if(normalizer(recipes[id]["appliance"]).includes(nom) === true) {
-                        idTag(id, "appliance", appliances);
-                    }
-                })
+            plats.forEach(function (plat) {
+                plat.style.display = "none";
+                if(normalizer(plat.dataset.appliance) == nom) {
+                   document.getElementById(plat.id).style.display = "block";
+                }
             });
             break;
         case "ustensils":
             tagUstensiles.push(nom);
-            Object.keys(recipes).map(function idObjet(id) { 
-                tagUstensiles.forEach(ustensils => {
-                    recipes[id]["ustensils"].forEach(ustensil => {
-                        if(normalizer(ustensil).includes(nom) === true) {
-                            idTag(id, "ustensils", ustensils);
-                        }
-                    });
-                })
+            plats.forEach(function (plat) {
+                plat.style.display = "none";
+                if(plat.classList.contains(nom.split(" ").join("_"))) {
+                    document.getElementById(plat.id).style.display = "block";
+                }
             });
             break;
         default:
@@ -184,11 +183,13 @@ function ajouteTag(type, nom) {
     /* Vérifie si similitude dans les 3 tableaux */
 }
 /* Met les recettes correspondantes */
-function plat(id, nom, personne, ingredients, temps, description) {
+function plat(id, nom, personne, ingredients, temps, description, appliance, ustensils) {
     let listePlats = document.getElementById("liste-plats");
     let recette = document.createElement("article");
     recette.classList.add("plat");
+    ustensils.forEach(ustensil => recette.classList.add(normalizer(ustensil.split(" ").join("_"))));
     recette.setAttribute("id", id);
+    recette.setAttribute("data-appliance", `${appliance}`)
 
     let plat = `
         <div class="image-plat"></div>
