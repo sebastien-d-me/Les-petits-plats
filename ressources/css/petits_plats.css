@@ -221,15 +221,21 @@ body {
 }
 /* Titre du plat */
 .titre-plat {
-  display: inline;
+  display: block;
+  float: left;
   font-size: 20px;
   margin: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: calc(100% - 40px - 25%);
 }
 /* Temps de préparation */
 .temps-preparation {
   float: right;
   font-size: 20px;
   font-weight: bold;
+  width: 25%;
 }
 .temps-preparation::before {
   content: "\f017";
@@ -246,6 +252,13 @@ body {
   float: left;
   margin: 20px 10px 0 0;
   width: calc(50% - 10px);
+}
+/* Aucun résultat */
+#aucun-resultat {
+  display: none;
+  font-size: 20px;
+  text-align: center;
+  width: 100%;
 }
 /* Type d'ingrédient */
 .type-ingredient {

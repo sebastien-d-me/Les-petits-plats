@@ -29,6 +29,20 @@ function fermetureFiltre(type) {
 }
 
 /*let recettes = `${recipes.map(recette => `${recette.name}`).join(" ")}`;*/
+/* Ajouter un élément afficher avec ce qui fait qu'il s'affiche (genre type-nom) et le retirer */
+
+/** Affiche toutes les recettes de base **/
+recipes.forEach(recipe => {
+    let idPlat = recipe["id"];
+    let nomPlat = recipe["name"];
+    let personnePlat = recipe["servings"];
+    let ingredientsPlat = recipe["ingredients"];
+    let tempsPlat = recipe["time"];
+    let descriptionPlat = recipe["description"];
+    let appareilsPlat = recipe["appliance"];
+    let ustensilesPlat = recipe["ustensils"];
+    return plat(idPlat, nomPlat, personnePlat, ingredientsPlat, tempsPlat, descriptionPlat, appareilsPlat, ustensilesPlat);
+});
 
 /** Gère les listes **/
 /* Enlève les accents, la ponctuation et met en minuscule */
@@ -81,115 +95,68 @@ listeTags("appliance");
 /* Affiche tous les ustensiles */
 listeTags("ustensils");
 
-/** Gère les tags choisis */
-let tagIngredients = [];
-let tagAppareils = [];
-let tagUstensiles = [];
 
-let listeIDIngredients = [];
-/*let listeIDAppareils = [];
-let listeIDUstensiles = [];*/
-/* Récupère les ID par rapport aux tags */
-function idTag(id, type, tag) {
-    switch(type) {
-        case "ingredients":
-            recipes[id]["ingredients"].forEach(ingredient => {
-                if(normalizer(ingredient["ingredient"]) == tag) {
-                    let idPlat = recipes[id]["id"];
-                    let nomPlat = recipes[id]["name"];
-                    let personnePlat = recipes[id]["servings"];
-                    let ingredientsPlat = recipes[id]["ingredients"];
-                    let tempsPlat = recipes[id]["time"];
-                    let descriptionPlat = recipes[id]["description"];
-                    let appareilsPlat = recipes[id]["appliance"];
-                    let ustensilesPlat = recipes[id]["ustensils"];
-                    return plat(idPlat, nomPlat, personnePlat, ingredientsPlat, tempsPlat, descriptionPlat, appareilsPlat, ustensilesPlat);
-                }
-            });
-            break;
-        /*case "appliance":
-            if(normalizer(recipes[id]["appliance"]) == tag) {
-                let idPlat = recipes[id]["id"];
-                let nomPlat = recipes[id]["name"];
-                let personnePlat = recipes[id]["servings"];
-                let ingredientsPlat = recipes[id]["ingredients"];
-                let tempsPlat = recipes[id]["time"];
-                let descriptionPlat = recipes[id]["description"];
-                let appareilsPlat = recipes[id]["appliance"];
-                let ustensilesPlat = recipes[id]["ustensils"];
-                return plat(idPlat, nomPlat, personnePlat, ingredientsPlat, tempsPlat, descriptionPlat, appareilsPlat, ustensilesPlat);
-            }
-            break;
-        case "ustensils":
-            recipes[id]["ustensils"].forEach(ustensils => {
-                if(normalizer(ustensils) == tag) {
-                    let idPlat = recipes[id]["id"];
-                    let nomPlat = recipes[id]["name"];
-                    let personnePlat = recipes[id]["servings"];
-                    let ingredientsPlat = recipes[id]["ingredients"];
-                    let tempsPlat = recipes[id]["time"];
-                    let descriptionPlat = recipes[id]["description"];
-                    let appareilsPlat = recipes[id]["appliance"];
-                    let ustensilesPlat = recipes[id]["ustensils"];
-                    return plat(idPlat, nomPlat, personnePlat, ingredientsPlat, tempsPlat, descriptionPlat, appareilsPlat, ustensilesPlat);
-                }
-            });
-            break;*/
-        default:
-            break;
-    }
-}
-/* SI TABLEAU VIDE ALORS NORMAL SI 2 -> MELANGE TABLEAU ET VERIFIE SI SIMIALIRE -> PAREIL 3 */
+/** SI TABLEAU VIDE ALORS NORMAL SI 2 -> MELANGE TABLEAU ET VERIFIE SI SIMIALIRE -> PAREIL 3 **/
 
-/* Ajoute le tag dans les tag choisis */
+/** Ajoute le tag dans les tag choisis **/
 function ajouteTag(type, nom) {
     document.getElementById("tags-choisis").insertAdjacentHTML("beforeend", `<span class="tag tag-${type}" id="${type}-${nom}">${nom} <i class="far fa-times-circle" onclick="supprimeTag('${type}-${nom}')"></i></span>`);
     let plats = document.querySelectorAll(".plat");
     switch(type) {
-        case "ingredients":
-            /* Récupère l'id de la / des recette(s) possédant cette ingrédient */
-            tagIngredients.push(nom);
-            Object.keys(recipes).map(function idObjet(id) { 
-                tagIngredients.forEach(ingredients => {
-                    recipes[id]["ingredients"].forEach(ingredient => {
-                        if(normalizer(ingredient["ingredient"]).includes(nom) === true) {
-                            idTag(id, "ingredients", ingredients);
-                        }
-                    });
-                })
-            });
-            break;
-        case "appliance":
-            tagAppareils.push(nom);
+        case "ingredients":          
             plats.forEach(function (plat) {
-                plat.style.display = "none";
-                if(normalizer(plat.dataset.appliance) == nom) {
-                   document.getElementById(plat.id).style.display = "block";
+                if(plat.classList.contains("ingredient_"+nom.split(" ").join("_"))) {
+                    console.log("ddd")
+                    if(plat.style.display == "block") {
+                        document.getElementById(plat.id).style.display = "block";
+                    }
+                } else {
+                    document.getElementById(plat.id).style.display = "none";
                 }
             });
             break;
-        case "ustensils":
-            tagUstensiles.push(nom);
+        case "appliance":
             plats.forEach(function (plat) {
-                plat.style.display = "none";
-                if(plat.classList.contains(nom.split(" ").join("_"))) {
-                    document.getElementById(plat.id).style.display = "block";
+                if(normalizer(plat.dataset.appliance) == nom) {
+                    if(plat.style.display == "block") {
+                        document.getElementById(plat.id).style.display = "block";
+                    }
+                } else {
+                    document.getElementById(plat.id).style.display = "none";
+                }
+            });
+            break;
+        case "ustensils":  
+            plats.forEach(function (plat) {
+                console.log(nom.split(" ").join("_"))
+                if(plat.classList.contains("ustensile_"+nom.split(" ").join("_"))) {
+                    if(plat.style.display == "block") {
+                        document.getElementById(plat.id).style.display = "block";
+                    }
+                } else {
+                    document.getElementById(plat.id).style.display = "none";
                 }
             });
             break;
         default:
             break;
     }
-    /* Vérifie si similitude dans les 3 tableaux */
 }
-/* Met les recettes correspondantes */
+/* Supprime le tag dans les tags choisis */
+function supprimeTag(id, type, supprimer) {
+    document.getElementById(id).classList.remove(type+"-"+supprimer);
+}
+
+/** Affiche les recettes **/
 function plat(id, nom, personne, ingredients, temps, description, appliance, ustensils) {
     let listePlats = document.getElementById("liste-plats");
     let recette = document.createElement("article");
-    recette.classList.add("plat");
-    ustensils.forEach(ustensil => recette.classList.add(normalizer(ustensil.split(" ").join("_"))));
     recette.setAttribute("id", id);
-    recette.setAttribute("data-appliance", `${appliance}`)
+    recette.setAttribute("data-nom", `${nom}`);
+    recette.setAttribute("data-appliance", `${appliance}`);
+    recette.classList.add("plat");
+    ingredients.forEach(ingredient => recette.classList.add(normalizer("ingredient_"+ingredient.ingredient.split(" ").join("_"))));
+    ustensils.forEach(ustensil => recette.classList.add(normalizer("ustensile_"+ustensil.split(" ").join("_"))));
 
     let plat = `
         <div class="image-plat"></div>
@@ -209,8 +176,4 @@ function plat(id, nom, personne, ingredients, temps, description, appliance, ust
 
     recette.innerHTML = plat;
     listePlats.appendChild(recette);
-}
-/* Supprime le tag dans les tags choisis */
-function supprimeTag(id) {
-    document.getElementById(id).remove();
 }
