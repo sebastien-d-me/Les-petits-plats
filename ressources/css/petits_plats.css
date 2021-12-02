@@ -259,6 +259,9 @@ body {
   margin: 20px 10px 0 0;
   width: calc(50% - 10px);
 }
+.tag-cacher {
+  display: none;
+}
 /* Aucun résultat */
 #aucun-resultat {
   display: none;

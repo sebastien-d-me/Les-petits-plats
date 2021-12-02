@@ -29,7 +29,6 @@ function fermetureFiltre(type) {
 }
 
 /*let recettes = `${recipes.map(recette => `${recette.name}`).join(" ")}`;*/
-/* Ajouter un élément afficher avec ce qui fait qu'il s'affiche (genre type-nom) et le retirer */
 
 /** Affiche toutes les recettes de base **/
 recipes.forEach(recipe => {
@@ -96,13 +95,10 @@ listeTags("appliance");
 /* Affiche tous les ustensiles */
 listeTags("ustensils");
 
-
-/** SI TABLEAU VIDE ALORS NORMAL SI 2 -> MELANGE TABLEAU ET VERIFIE SI SIMIALIRE -> PAREIL 3 **/
-
 /** Ajoute le tag dans les tag choisis **/
 function ajouteTag(type, nom) {
-    nomID = nom.split(" ").join("-")
-    document.getElementById("tags-choisis").insertAdjacentHTML("beforeend", `<span class="tag tag-${type}" id="tag-${type}-${nomID}">${nom} <i class="far fa-times-circle" onclick="supprimeTag('${type}-${nom}')"></i></span>`);
+    let nomID = nom.split(" ").join("-");
+    document.getElementById("tags-choisis").insertAdjacentHTML("beforeend", `<span class="tag tag-${type}" id="tag-${type}-${nomID}">${nom}<i class="far fa-times-circle" onclick="supprimeTag('${type}', '${nom}')"></i></span>`);
     let plats = document.querySelectorAll(".plat");
     switch(type) {
         case "ingredients":          
@@ -144,6 +140,8 @@ function ajouteTag(type, nom) {
         default:
             break;
     }
+    /* Cache le tag si cliqué */
+    document.getElementById(type+"-"+nom.split(" ").join("-")).classList.add("tag-cacher");
     /* Vérifie si un plat est affiché */
     let nbPlats = document.querySelectorAll(".plat:not(.plat-cacher)").length;
     if(nbPlats === 0) {
@@ -153,8 +151,15 @@ function ajouteTag(type, nom) {
     }
 }
 /* Supprime le tag dans les tags choisis */
-function supprimeTag(id, type, supprimer) {
-    document.getElementById(id).classList.remove(type+"-"+supprimer);
+function supprimeTag(type, nom) {
+    document.getElementById(type+"-"+nom.split(" ").join("-")).classList.remove("tag-cacher");
+    let plats = document.querySelectorAll(".plat");
+    plats.forEach(function (plat) {
+        if(!plat.classList.contains(type+"-"+nom.split(" ").join("-"))) {
+            plat.classList.remove("plat-cacher");
+        }
+    });
+    document.getElementById("tag-"+type+"-"+nom.split(" ").join("-")).remove();
 }
 
 /** Affiche les recettes **/
@@ -167,7 +172,6 @@ function plat(id, nom, personne, ingredients, temps, description, appliance, ust
     recette.classList.add("plat");
     ingredients.forEach(ingredient => recette.classList.add(normalizer("ingredient-"+ingredient.ingredient.split(" ").join("-"))));
     ustensils.forEach(ustensil => recette.classList.add(normalizer("ustensile-"+ustensil.split(" ").join("-"))));
-
     let plat = `
         <div class="image-plat"></div>
         <div class="description-plat">
@@ -183,7 +187,6 @@ function plat(id, nom, personne, ingredients, temps, description, appliance, ust
             </div>
         </div>
     `;
-
     recette.innerHTML = plat;
     listePlats.appendChild(recette);
 }
