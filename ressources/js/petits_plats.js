@@ -85,7 +85,8 @@ function listeTags(type) {
     liste = liste.sort((a, b) => a.localeCompare(b));
     /* Insert en éliminant les doublons dans le DOM */
     new Set(liste).forEach((data) => {
-        document.getElementById("liste-filtre-"+type).insertAdjacentHTML("beforeend", `<li class="nom-filtre" data-type="${type}" data-nom="${data}" onclick="ajouteTag('${type}', '${data}')">${data}</li>`);
+        nom = data.split(" ").join("-")
+        document.getElementById("liste-filtre-"+type).insertAdjacentHTML("beforeend", `<li class="nom-filtre" id="${type}-${nom}" data-type="${type}" data-nom="${data}" onclick="ajouteTag('${type}', '${data}')">${data}</li>`);
     });
 }
 /* Affiche tous les ingrédients */ 
@@ -100,46 +101,55 @@ listeTags("ustensils");
 
 /** Ajoute le tag dans les tag choisis **/
 function ajouteTag(type, nom) {
-    document.getElementById("tags-choisis").insertAdjacentHTML("beforeend", `<span class="tag tag-${type}" id="${type}-${nom}">${nom} <i class="far fa-times-circle" onclick="supprimeTag('${type}-${nom}')"></i></span>`);
+    nomID = nom.split(" ").join("-")
+    document.getElementById("tags-choisis").insertAdjacentHTML("beforeend", `<span class="tag tag-${type}" id="tag-${type}-${nomID}">${nom} <i class="far fa-times-circle" onclick="supprimeTag('${type}-${nom}')"></i></span>`);
     let plats = document.querySelectorAll(".plat");
     switch(type) {
         case "ingredients":          
             plats.forEach(function (plat) {
-                if(plat.classList.contains("ingredient_"+nom.split(" ").join("_"))) {
-                    console.log("ddd")
-                    if(plat.style.display == "block") {
-                        document.getElementById(plat.id).style.display = "block";
+                if(plat.classList.contains("ingredient-"+nom.split(" ").join("-"))) {
+                    if(plat.classList.contains("plat-afficher")) {
+                        document.getElementById(plat.id).classList.add("plat-afficher");
                     }
                 } else {
-                    document.getElementById(plat.id).style.display = "none";
+                    document.getElementById(plat.id).classList.remove("plat-afficher");
+                    document.getElementById(plat.id).classList.add("plat-cacher");
                 }
             });
             break;
         case "appliance":
             plats.forEach(function (plat) {
                 if(normalizer(plat.dataset.appliance) == nom) {
-                    if(plat.style.display == "block") {
-                        document.getElementById(plat.id).style.display = "block";
+                    if(plat.classList.contains("plat-afficher")) {
+                        document.getElementById(plat.id).classList.add("plat-afficher");
                     }
                 } else {
-                    document.getElementById(plat.id).style.display = "none";
+                    document.getElementById(plat.id).classList.remove("plat-afficher");
+                    document.getElementById(plat.id).classList.add("plat-cacher");
                 }
             });
             break;
         case "ustensils":  
             plats.forEach(function (plat) {
-                console.log(nom.split(" ").join("_"))
-                if(plat.classList.contains("ustensile_"+nom.split(" ").join("_"))) {
-                    if(plat.style.display == "block") {
-                        document.getElementById(plat.id).style.display = "block";
+                if(plat.classList.contains("ustensile-"+nom.split(" ").join("-"))) {
+                    if(plat.classList.contains("plat-afficher")) {
+                        document.getElementById(plat.id).classList.add("plat-afficher");
                     }
                 } else {
-                    document.getElementById(plat.id).style.display = "none";
+                    document.getElementById(plat.id).classList.remove("plat-afficher");
+                    document.getElementById(plat.id).classList.add("plat-cacher");
                 }
             });
             break;
         default:
             break;
+    }
+    /* Vérifie si un plat est affiché */
+    let nbPlats = document.querySelectorAll(".plat:not(.plat-cacher)").length;
+    if(nbPlats === 0) {
+        document.getElementById("aucun-resultat").classList.add("aucun-resultat-afficher");
+    } else {
+        document.getElementById("aucun-resultat").classList.remove("aucun-resultat-afficher");
     }
 }
 /* Supprime le tag dans les tags choisis */
@@ -155,8 +165,8 @@ function plat(id, nom, personne, ingredients, temps, description, appliance, ust
     recette.setAttribute("data-nom", `${nom}`);
     recette.setAttribute("data-appliance", `${appliance}`);
     recette.classList.add("plat");
-    ingredients.forEach(ingredient => recette.classList.add(normalizer("ingredient_"+ingredient.ingredient.split(" ").join("_"))));
-    ustensils.forEach(ustensil => recette.classList.add(normalizer("ustensile_"+ustensil.split(" ").join("_"))));
+    ingredients.forEach(ingredient => recette.classList.add(normalizer("ingredient-"+ingredient.ingredient.split(" ").join("-"))));
+    ustensils.forEach(ustensil => recette.classList.add(normalizer("ustensile-"+ustensil.split(" ").join("-"))));
 
     let plat = `
         <div class="image-plat"></div>

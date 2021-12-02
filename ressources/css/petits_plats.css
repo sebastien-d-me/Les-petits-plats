@@ -203,6 +203,12 @@ body {
   max-width: calc((100% - 100px) / 3);
   padding-bottom: 15px;
 }
+.plat-afficher {
+  display: block;
+}
+.plat-cacher {
+  display: none;
+}
 /* Image plat */
 .image-plat {
   background-color: #c7bebe;
@@ -260,6 +266,9 @@ body {
   text-align: center;
   width: 100%;
 }
+.aucun-resultat-afficher {
+  display: block !important;
+}
 /* Type d'ingrédient */
 .type-ingredient {
   display: block;
@@ -290,27 +299,34 @@ body {
 
 /** Responsive **/
 /* 1600 */
-@media screen and (max-width: 1600px) {
+@media screen and (max-width: 1650px) {
   /** Base **/
   html,
   body {
     margin: 20px 50px;
   }
   /** Plats **/
-  /* Liste d'ingrédient */
-  .liste-ingredient {
-    float: unset;
-  }
   /* Titre du plat */
   .titre-plat {
     font-size: 18px;
+    float: unset;
+    width: unset;
   }
   /* Temps de préparation */
   .temps-preparation {
     font-size: 16px;
+    width: unset;
   }
   .temps-preparation::before {
     font-size: 15px;
+  }
+  /* Liste d'ingrédient */
+  .liste-ingredient {
+    width: 100%;
+  }
+  /** Recette */
+  .recette {
+    width: 100%;
   }
 }
 /* 1400 */
@@ -355,6 +371,7 @@ body {
   }
   .plat {
     flex: 1 0 calc((100% - 100px) / 2);
+    max-width: 100%;
   }
   /* Titre du plat */
   .titre-plat {
