@@ -377,11 +377,15 @@ body {
   }
   /* Titre du plat */
   .titre-plat {
+    display: block;
     font-size: 20px;
   }
   /* Temps de préparation */
   .temps-preparation {
+    display: block;
+    float: unset;
     font-size: 18px;
+    margin-top: 5px;
   }
   .temps-preparation::before {
     font-size: 17px;
@@ -423,15 +427,6 @@ body {
   /* Liste des plats */
   #liste-plats {
     gap: 25px 0;
-  }
-  .titre-plat {
-    display: block;
-  }
-  /* Temps de préparation */
-  .temps-preparation {
-    display: block;
-    float: unset;
-    margin-top: 5px;
   }
   .plat {
     flex: 1 0 calc((100% - 100px) / 1);
