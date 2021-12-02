@@ -227,8 +227,7 @@ body {
 }
 /* Titre du plat */
 .titre-plat {
-  display: block;
-  float: left;
+  display: inline-block;
   font-size: 20px;
   margin: auto;
   overflow: hidden;
@@ -378,6 +377,7 @@ body {
   }
   /* Titre du plat */
   .titre-plat {
+    display: block;
     font-size: 20px;
   }
   /* Temps de préparation */
