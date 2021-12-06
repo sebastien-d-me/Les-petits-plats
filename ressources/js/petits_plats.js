@@ -95,6 +95,49 @@ listeTags("appliance");
 /* Affiche tous les ustensiles */
 listeTags("ustensils");
 
+
+/** Gère la barre de recherche **/
+let champRechercher = document.querySelector('#champ-rechercher');
+function rechercher(recipes) {
+    let listePlats = document.querySelectorAll(".plat");
+    /* Recherche si un nom, ingrédient, description correspond */
+    champRechercher.addEventListener("keyup", (e) => {
+        let rechercheValeur = normalizer(e.target.value);
+        if(rechercheValeur.length >= 3) {
+            let resultatRecherche = recipes.filter((recette) => {
+                return(
+                    normalizer(recette.name).includes(rechercheValeur),
+                    recette.ingredients.some((numIngredient) => normalizer(numIngredient.ingredient).includes(rechercheValeur)),
+                    normalizer(recette.description).includes(rechercheValeur)
+                );
+            });
+            /* Gère l'affichage */
+            listePlats.forEach(plat => {
+                plat.classList.remove("plat-afficher");
+                plat.classList.add("plat-cacher");
+            });
+            resultatRecherche.forEach(platsCorrespondant => {
+                document.getElementById(platsCorrespondant.id).classList.remove("plat-cacher");
+                document.getElementById(platsCorrespondant.id).classList.add("plat-afficher");
+            });
+            /* Vérifie si un plat est affiché */
+            let nbPlats = resultatRecherche.length;
+            if(nbPlats === 0) {
+                document.getElementById("aucun-resultat").classList.add("aucun-resultat-afficher");
+            } else {
+                document.getElementById("aucun-resultat").classList.remove("aucun-resultat-afficher");
+            }
+        } else {
+            listePlats.forEach(plat => {
+                plat.classList.remove("plat-cacher");
+                plat.classList.add("plat-afficher");
+            });
+        }
+    });
+}
+rechercher(recipes);
+
+
 /** Ajoute le tag dans les tag choisis **/
 function ajouteTag(type, nom) {
     let nomID = nom.split(" ").join("-");
