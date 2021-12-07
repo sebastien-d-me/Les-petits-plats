@@ -121,12 +121,36 @@ function rechercher(recipes) {
                 ingr.classList.remove("nom-filtre-afficher");
                 ingr.classList.add("nom-filtre-cacher");
             });
+            let listeAppareils = document.querySelectorAll("[data-type='appliance']");
+            listeAppareils.forEach(appareil => {
+                appareil.classList.remove("nom-filtre-afficher");
+                appareil.classList.add("nom-filtre-cacher");
+            });
+            let listeUstensils = document.querySelectorAll("[data-type='ustensils']");
+            listeUstensils.forEach(ustensil => {
+                ustensil.classList.remove("nom-filtre-afficher");
+                ustensil.classList.add("nom-filtre-cacher");
+            });
             resultatRecherche.forEach(platsCorrespondant => {
                 platsCorrespondant.ingredients.map(ingredient => {
                     listeIngredients.forEach(ingr => {
-                        if(ingr.getAttribute("id") == "ingredients-"+normalizer(ingredient.ingredient)) {
-                            document.getElementById("ingredients-"+normalizer(ingredient.ingredient).split(" ").join("-")).classList.remove("nom-filtre-cacher");
-                            document.getElementById("ingredients-"+normalizer(ingredient.ingredient).split(" ").join("-")).classList.add("nom-filtre-afficher");
+                        if(ingr.getAttribute("id") === "ingredients-"+normalizer(ingredient.ingredient).split(" ").join("-")) {
+                            ingr.classList.remove("nom-filtre-cacher");
+                            ingr.classList.add("nom-filtre-afficher");
+                        }
+                    });
+                });
+                listeAppareils.forEach(appareil => {
+                    if(appareil.getAttribute("id") === "appliance-"+normalizer(platsCorrespondant.appliance).split(" ").join("-")) {
+                        appareil.classList.remove("nom-filtre-cacher");
+                        appareil.classList.add("nom-filtre-afficher");
+                    }
+                });
+                platsCorrespondant.ustensils.map(ustensile => {
+                    listeUstensils.forEach(ust => {
+                        if(ust.getAttribute("id") === "ustensils-"+normalizer(ustensile).split(" ").join("-")) {
+                            ust.classList.remove("nom-filtre-cacher");
+                            ust.classList.add("nom-filtre-afficher");
                         }
                     });
                 });
