@@ -96,7 +96,7 @@ listeTags("appliance");
 listeTags("ustensils");
 
 
-/** Gère la barre de recherche **/
+/** Gère la barre de recherche principale **/
 let champRechercher = document.querySelector('#champ-rechercher');
 function rechercher(recipes) {
     let listePlats = document.querySelectorAll(".plat");
@@ -168,6 +168,11 @@ function rechercher(recipes) {
             listePlats.forEach(plat => {
                 plat.classList.remove("plat-cacher");
                 plat.classList.add("plat-afficher");
+            });
+            listeFiltres = document.querySelectorAll(".nom-filtre");
+            listeFiltres.forEach(filtre => {
+                filtre.classList.remove("nom-filtre-cacher");
+                filtre.classList.remove("nom-filtre-afficher");
             });
         }
     });
@@ -242,8 +247,48 @@ function supprimeTag(type, nom) {
     document.getElementById("tag-"+type+"-"+nom.split(" ").join("-")).remove();
 }
 
+/** Gère la barre de recherche dans les tags **/
+let champAppareils = document.querySelector('#champ-appareils');
+let tableauAppareils = [];
+let listeAppareils = document.querySelectorAll("[data-type='appliance']");
+listeAppareils.forEach(appareil => {
+    tableauAppareils.push(appareil.getAttribute("data-nom"));
+});
+function rechercherTag(type, tableauAppareils) {
+    /* Recherche si un tag correspond */
+    champAppareils.addEventListener("keyup", (e) => {
+        let rechercheValeur = normalizer(e.target.value);
+        if(rechercheValeur.length >= 1) {
+            let resultatRecherche = tableauAppareils.filter((app) => {
+                return(
+                    normalizer(app).includes(rechercheValeur)
+                );
+            });
+            listeAppareils.forEach(appareil => {
+                appareil.classList.remove("nom-filtre-afficher");
+                appareil.classList.add("nom-filtre-cacher");
+            });
+            resultatRecherche.forEach(tagCorrespondant => {
+                listeAppareils.forEach(appareil => {
+                    if(tagCorrespondant === appareil.getAttribute("data-nom")) {
+                        appareil.classList.remove("nom-filtre-cacher");
+                        appareil.classList.add("nom-filtre-afficher");
+                    }
+                });
+            });
+        } else {
+            listeAppareils.forEach(appareil => {
+                appareil.classList.remove("nom-filtre-cacher");
+                appareil.classList.add("nom-filtre-afficher");
+            });
+        }
+    })
+}
+rechercherTag("", tableauAppareils);
+
 /** Affiche les recettes **/
 function plat(id, nom, personne, ingredients, temps, description, appliance, ustensils) {
+    /* Récupère les plats et créer l'élément */
     let listePlats = document.getElementById("liste-plats");
     let recette = document.createElement("article");
     recette.setAttribute("id", id);
@@ -252,6 +297,7 @@ function plat(id, nom, personne, ingredients, temps, description, appliance, ust
     recette.classList.add("plat");
     ingredients.forEach(ingredient => recette.classList.add(normalizer("ingredient-"+ingredient.ingredient.split(" ").join("-"))));
     ustensils.forEach(ustensil => recette.classList.add(normalizer("ustensile-"+ustensil.split(" ").join("-"))));
+    /* Créer le template */
     let plat = `
         <div class="image-plat"></div>
         <div class="description-plat">
