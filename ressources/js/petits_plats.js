@@ -116,7 +116,20 @@ function rechercher(recipes) {
                 plat.classList.remove("plat-afficher");
                 plat.classList.add("plat-cacher");
             });
+            let listeIngredients = document.querySelectorAll("[data-type='ingredients']");
+            listeIngredients.forEach(ingr => {
+                ingr.classList.remove("nom-filtre-afficher");
+                ingr.classList.add("nom-filtre-cacher");
+            });
             resultatRecherche.forEach(platsCorrespondant => {
+                platsCorrespondant.ingredients.map(ingredient => {
+                    listeIngredients.forEach(ingr => {
+                        if(ingr.getAttribute("id") == "ingredients-"+normalizer(ingredient.ingredient)) {
+                            document.getElementById("ingredients-"+normalizer(ingredient.ingredient).split(" ").join("-")).classList.remove("nom-filtre-cacher");
+                            document.getElementById("ingredients-"+normalizer(ingredient.ingredient).split(" ").join("-")).classList.add("nom-filtre-afficher");
+                        }
+                    });
+                });
                 document.getElementById(platsCorrespondant.id).classList.remove("plat-cacher");
                 document.getElementById(platsCorrespondant.id).classList.add("plat-afficher");
             });

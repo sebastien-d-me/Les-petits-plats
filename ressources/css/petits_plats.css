@@ -167,6 +167,12 @@ body {
 .nom-filtre:first-letter {
   text-transform: capitalize;
 }
+.nom-filtre-afficher {
+  display: block;
+}
+.nom-filtre-cacher {
+  display: none;
+}
 /* Ingrédients */
 #btn-ingredients,
 #cherche-ingredients,
