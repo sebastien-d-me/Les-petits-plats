@@ -1,58 +1,73 @@
-/** Gère l'ouverture / fermeture des filtres **/
-/* Ouverture du filtre */
-function ouvreFiltre(type) {
-    /* Réinitialise les boutons et filtres */
-    let btnFiltres = document.querySelectorAll(".btn-filtre");
-    btnFiltres.forEach(btn => {
-        btn.classList.remove("btn-cacher");
-        btn.classList.add("btn-afficher");
-    });
-    let filtres = document.querySelectorAll(".cherche-filtre");
-    filtres.forEach(filtre => {
-        filtre.classList.remove("cherche-filtre-afficher");
-        filtre.classList.add("cherche-filtre-cacher");
-    });
-    /* Apparence du bouton et filtre en question */
-    let btnType = document.getElementById("btn-"+type);
-    let chercheType = document.getElementById("cherche-"+type);
-    btnType.classList.add("btn-cacher");
-    chercheType.classList.add("cherche-filtre-afficher");
-}
-/* Fermeture du filtre */
-function fermetureFiltre(type) {
-    let btnType = document.getElementById("btn-"+type);
-    let chercheType = document.getElementById("cherche-"+type);
-    btnType.classList.remove("btn-cacher");
-    btnType.classList.add("btn-afficher");
-    chercheType.classList.remove("cherche-filtre-afficher");
-    chercheType.classList.add("cherche-filtre-cacher");
-}
-
-/*let recettes = `${recipes.map(recette => `${recette.name}`).join(" ")}`;*/
-
-/** Affiche toutes les recettes de base **/
-recipes.forEach(recipe => {
-    let idPlat = recipe["id"];
-    let nomPlat = recipe["name"];
-    let personnePlat = recipe["servings"];
-    let ingredientsPlat = recipe["ingredients"];
-    let tempsPlat = recipe["time"];
-    let descriptionPlat = recipe["description"];
-    let appareilsPlat = recipe["appliance"];
-    let ustensilesPlat = recipe["ustensils"];
-    return plat(idPlat, nomPlat, personnePlat, ingredientsPlat, tempsPlat, descriptionPlat, appareilsPlat, ustensilesPlat);
-});
-
-/** Gère les listes **/
-/* Enlève les accents, la ponctuation et met en minuscule */
+/*** Réecrit ***/
+/** Normalizer **/
 function normalizer(data) {
     data = data.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     data = data.replace(/[.,!;:?]/g,"");
     data = data.toLowerCase();
     return data;
 }
-/* Récupère la liste des tags */
-function listeTags(type) {
+
+/** Kebab case **/
+function kebabCase(data) {
+    data = data.split(" ").join("-");
+    return data;
+}
+
+
+
+/*** Gère les recettes ***/
+/** Récupère les données des recettes **/
+recipes.forEach(recipe => {
+    let idRecette = recipe["id"];
+    let nomRecette = recipe["name"];
+    let personneRecette = recipe["servings"];
+    let tempsRecette = recipe["time"];
+    let ingredientsRecette = recipe["ingredients"];
+    let descriptionRecette = recipe["description"];
+    let appareilsRecette = recipe["appliance"];
+    let ustensilesRecette = recipe["ustensils"];
+    return construitRecette(idRecette, nomRecette, personneRecette, tempsRecette, ingredientsRecette, descriptionRecette, appareilsRecette, ustensilesRecette);
+});
+
+/** Construit les recettes **/
+function construitRecette(id, nom, personne, temps, ingredients, description, appliance, ustensils) {
+    /* Récupère les recettes et créer l'élément */
+    let listeRecettes = document.getElementById("liste-recettes");
+    let recette = document.createElement("article");
+    recette.setAttribute("id", `${id}`);
+    recette.setAttribute("data-nom", `${nom}`);
+    recette.setAttribute("data-appliance", `${appliance}`);
+    recette.classList.add("recette");
+    ingredients.forEach(ingredient => recette.classList.add(normalizer("ingredient-"+kebabCase(ingredient.ingredient))));
+    ustensils.forEach(ustensil => recette.classList.add(normalizer("ustensile-"+kebabCase(ustensil))));
+    /* Créer le template */
+    let recetteTemplate = `
+        <div class="image-recette"></div>
+        <div class="contenu-recette">
+            <h1 class="titre-recette">${nom}</h1>
+            <span class="temps-preparation">${temps}</span>
+            <div class="liste-ingredient">
+                ${ingredients.map(ingredient =>
+                    `<span class="type-ingredient">${ingredient.ingredient}<span class="nombre-ingredient">${ingredient.quantity || ''}${ingredient.quantite || ''} ${ingredient.unit || ''}</span></span>`
+                ).join(" ")}
+            </div>
+            <div class="description-recette">
+                <p>${description}</p>
+            </div>
+        </div>
+    `;
+    recette.innerHTML = recetteTemplate;
+    listeRecettes.appendChild(recette);
+}
+
+/** Liste des recettes **/
+let recettes = document.querySelectorAll(".recette");
+
+
+
+/*** Gère les filtres ***/
+/** Ajoute chaque élément dans la liste des filtres **/
+function listeFiltres(type) {
     let liste = [];
     /* Ajoute dans un tableau les données selon le type */
     recipes.forEach(recipe => {
@@ -84,23 +99,197 @@ function listeTags(type) {
     liste = liste.sort((a, b) => a.localeCompare(b));
     /* Insert en éliminant les doublons dans le DOM */
     new Set(liste).forEach((data) => {
-        nom = data.split(" ").join("-")
-        document.getElementById("liste-filtre-"+type).insertAdjacentHTML("beforeend", `<li class="nom-filtre" id="${type}-${nom}" data-type="${type}" data-nom="${data}" onclick="ajouteTag('${type}', '${data}')">${data}</li>`);
+        nom = kebabCase(data);
+        document.getElementById("liste-filtre-"+type).insertAdjacentHTML("beforeend", `<li class="nom-filtre" id="${type}-${nom}" data-type="${type}" data-nom="${data}" onclick="ajouteFiltre('${type}', '${data}')">${data}</li>`);
     });
 }
 /* Affiche tous les ingrédients */ 
-listeTags("ingredients");
+listeFiltres("ingredients");
 /* Affiche tous les appareils */
-listeTags("appliance");
+listeFiltres("appliance");
 /* Affiche tous les ustensiles */
-listeTags("ustensils");
+listeFiltres("ustensils");
+
+/** Liste des filtres **/
+let listeIngredients = document.querySelectorAll("[data-type='ingredients']");
+let listeAppareils = document.querySelectorAll("[data-type='appliance']");
+let listeUstensils = document.querySelectorAll("[data-type='ustensils']");
+
+/** Aperçu des filtres **/
+/* Ouverture */
+function ouvreFiltre(type) {
+    /* Réinitialise les boutons et filtres */
+    let btnFiltres = document.querySelectorAll(".btn-filtre");
+    btnFiltres.forEach(btn => {
+        btn.classList.remove("btn-cacher");
+        btn.classList.add("btn-afficher");
+    });
+    let filtres = document.querySelectorAll(".cherche-filtre");
+    filtres.forEach(filtre => {
+        filtre.classList.remove("cherche-filtre-afficher");
+        filtre.classList.add("cherche-filtre-cacher");
+    });
+    /* Apparence du bouton et filtre en question */
+    let btnType = document.getElementById("btn-"+type);
+    let chercheType = document.getElementById("cherche-"+type);
+    btnType.classList.add("btn-cacher");
+    chercheType.classList.add("cherche-filtre-afficher");
+}
+/* Fermeture */
+function fermetureFiltre(type) {
+    let btnType = document.getElementById("btn-"+type);
+    let chercheType = document.getElementById("cherche-"+type);
+    btnType.classList.remove("btn-cacher");
+    btnType.classList.add("btn-afficher");
+    chercheType.classList.remove("cherche-filtre-afficher");
+    chercheType.classList.add("cherche-filtre-cacher");
+}
+
+/** Ajoute le filtre des choisis **/
+function ajouteFiltre(type, nom) {
+    let nomID = kebabCase(nom);
+    document.getElementById("filtres-choisis").insertAdjacentHTML("beforeend", `<span class="filtre filtre-${type}" id="filtre-${type}-${nomID}">${nom}<i class="far fa-times-circle" onclick="supprimeFiltre('${type}', '${nom}')"></i></span>`);
+    switch(type) {
+        case "ingredients":          
+            recettes.forEach(function (recette) {
+                if(recette.classList.contains("ingredient-"+kebabCase(nom))) {
+                    if(recette.classList.contains("recette-afficher")) {
+                        document.getElementById(recette.id).classList.add("recette-afficher");
+                    }
+                } else {
+                    document.getElementById(recette.id).classList.remove("recette-afficher");
+                    document.getElementById(recette.id).classList.add("recette-cacher");
+                }
+            });
+            break;
+        case "appliance":
+            recettes.forEach(function (recette) {
+                if(normalizer(recette.dataset.appliance) === nom) {
+                    if(recette.classList.contains("recette-afficher")) {
+                        document.getElementById(recette.id).classList.add("recette-afficher");
+                    }
+                } else {
+                    document.getElementById(recette.id).classList.remove("recette-afficher");
+                    document.getElementById(recette.id).classList.add("recette-cacher");
+                }
+            });
+            break;
+        case "ustensils":  
+        recettes.forEach(function (recette) {
+                if(recette.classList.contains("ustensile-"+kebabCase(nom))) {
+                    if(recette.classList.contains("recette-afficher")) {
+                        document.getElementById(recette.id).classList.add("recette-afficher");
+                    }
+                } else {
+                    document.getElementById(recette.id).classList.remove("recette-afficher");
+                    document.getElementById(recette.id).classList.add("recette-cacher");
+                }
+            });
+            break;
+        default:
+            break;
+    }
+    /* Cache le filtre si cliqué */
+    document.getElementById(type+"-"+kebabCase(nom)).classList.add("filtre-cacher");
+    /* Vérifie si une recette est affichée */
+    let nbRecettesAfficher = document.querySelectorAll(".recette:not(.recette-cacher)").length;
+    if(nbRecettesAfficher === 0) {
+        document.getElementById("aucun-resultat").classList.add("aucun-resultat-afficher");
+    } else {
+        document.getElementById("aucun-resultat").classList.remove("aucun-resultat-afficher");
+    }
+}
+
+/** Gère la barre de recherche dans les filtres **/
+let tableauIngredients = [];
+let tableauAppareils = [];
+let tableauUstensiles = [];
+listeIngredients.forEach(ingredient => {
+    tableauIngredients.push(ingredient.getAttribute("data-nom"));
+});
+listeAppareils.forEach(appareil => {
+    tableauAppareils.push(appareil.getAttribute("data-nom"));
+});
+listeUstensils.forEach(ustensil => {
+    tableauUstensiles.push(ustensil.getAttribute("data-nom"));
+});
+function rechercherTag(type, tableau) {
+    let listeType = document.querySelectorAll("[data-type='"+type+"']");
+    champFiltres = document.querySelector("#champ-"+type);
+    /* Suit ce que l'utilisateur rentre */
+    champFiltres.addEventListener("keyup", (e) => {
+        let rechercheValeur = normalizer(e.target.value);
+        /* Si la recherche dépasse 1 caractère */
+        if(rechercheValeur.length >= 1) {
+            tableauFiltres = tableau;
+            let resultatRecherche = tableauFiltres.filter((app) => {
+                return(
+                    normalizer(app).includes(rechercheValeur)
+                );
+            });
+            /* Cache les filtres */
+            listeType.forEach(element => {
+                element.classList.remove("nom-filtre-afficher");
+                element.classList.add("nom-filtre-cacher");
+            });
+            /* Affiche ceux correspondant à la recherche */
+            resultatRecherche.forEach(tagCorrespondant => {
+                listeType.forEach(element => {
+                    if(tagCorrespondant === element.getAttribute("data-nom")) {
+                        element.classList.remove("nom-filtre-cacher");
+                        element.classList.add("nom-filtre-afficher");
+                    }
+                });
+            });
+        /* Sinon ré-affiche les filtres */
+        } else {
+            listeType.forEach(element => {
+                element.classList.remove("nom-filtre-cacher");
+                element.classList.add("nom-filtre-afficher");
+            });
+        }
+    })
+}
+rechercherTag("ingredients", tableauIngredients);
+rechercherTag("appliance", tableauAppareils);
+rechercherTag("ustensils", tableauUstensiles);
+
+/** Affiche les filtres **/
+function afficheFiltre(liste, type, condition) {
+    liste.forEach(listeItem => {
+        if(listeItem.getAttribute("id") === type+"-"+kebabCase(normalizer(condition))) {
+            listeItem.classList.remove("nom-filtre-cacher");
+            listeItem.classList.add("nom-filtre-afficher");
+        }
+    });
+}
+
+/** Cache les filtres **/
+function cacheFiltre(liste) {
+    liste.forEach(listeItem => {
+        listeItem.classList.remove("nom-filtre-afficher");
+        listeItem.classList.add("nom-filtre-cacher");
+    });
+}
+
+/** Supprime le filtre des choisis **/
+function supprimeFiltre(type, nom) {
+    document.getElementById(type+"-"+kebabCase(nom)).classList.remove("filtre-cacher");
+    recettes.forEach(function (recette) {
+        if(!recette.classList.contains(type+"-"+kebabCase(nom))) {
+            recette.classList.remove("recette-cacher");
+        }
+    });
+    document.getElementById("filtre-"+type+"-"+kebabCase(nom)).remove();
+}
 
 
-/** Gère la barre de recherche principale **/
+
+/*** Gère la barre de recherche principale ***/
+/** Champ rechercher **/
 let champRechercher = document.querySelector('#champ-rechercher');
 function rechercher(recipes) {
-    let listePlats = document.querySelectorAll(".plat");
-    /* Recherche si un nom, ingrédient, description correspond */
+    /* Suit ce que l'utilisateur rentre */
     champRechercher.addEventListener("keyup", (e) => {
         let rechercheValeur = normalizer(e.target.value);
         if(rechercheValeur.length >= 3) {
@@ -111,63 +300,42 @@ function rechercher(recipes) {
                     normalizer(recette.description).includes(rechercheValeur)
                 );
             });
-            /* Gère l'affichage */
-            listePlats.forEach(plat => {
-                plat.classList.remove("plat-afficher");
-                plat.classList.add("plat-cacher");
+            /* Cache toutes les recettes */
+            recettes.forEach(recette => {
+                recette.classList.remove("recette-afficher");
+                recette.classList.add("recette-cacher");
             });
-            let listeIngredients = document.querySelectorAll("[data-type='ingredients']");
-            listeIngredients.forEach(ingr => {
-                ingr.classList.remove("nom-filtre-afficher");
-                ingr.classList.add("nom-filtre-cacher");
-            });
-            let listeAppareils = document.querySelectorAll("[data-type='appliance']");
-            listeAppareils.forEach(appareil => {
-                appareil.classList.remove("nom-filtre-afficher");
-                appareil.classList.add("nom-filtre-cacher");
-            });
-            let listeUstensils = document.querySelectorAll("[data-type='ustensils']");
-            listeUstensils.forEach(ustensil => {
-                ustensil.classList.remove("nom-filtre-afficher");
-                ustensil.classList.add("nom-filtre-cacher");
-            });
-            resultatRecherche.forEach(platsCorrespondant => {
-                platsCorrespondant.ingredients.map(ingredient => {
-                    listeIngredients.forEach(ingr => {
-                        if(ingr.getAttribute("id") === "ingredients-"+normalizer(ingredient.ingredient).split(" ").join("-")) {
-                            ingr.classList.remove("nom-filtre-cacher");
-                            ingr.classList.add("nom-filtre-afficher");
-                        }
-                    });
+            /* Cache tout les filtres */
+            cacheFiltre(listeIngredients);
+            cacheFiltre(listeAppareils);
+            cacheFiltre(listeUstensils);
+            /* Recherche si un nom, ingrédient, description correspond */
+            resultatRecherche.forEach(recettesCorrespondantes => {
+                /* Affiche les ingrédients correspondants */
+                recettesCorrespondantes.ingredients.map(ingredient => {
+                    afficheFiltre(listeIngredients, "ingredients", ingredient.ingredient);
                 });
-                listeAppareils.forEach(appareil => {
-                    if(appareil.getAttribute("id") === "appliance-"+normalizer(platsCorrespondant.appliance).split(" ").join("-")) {
-                        appareil.classList.remove("nom-filtre-cacher");
-                        appareil.classList.add("nom-filtre-afficher");
-                    }
+                /* Affiche les appareils correspondants */
+                afficheFiltre(listeAppareils, "appliance", recettesCorrespondantes.appliance);
+                /* Affiche les ustensiles correspondants */
+                recettesCorrespondantes.ustensils.map(ustensile => {
+                    afficheFiltre(listeUstensils, "ustensils", ustensile);
                 });
-                platsCorrespondant.ustensils.map(ustensile => {
-                    listeUstensils.forEach(ust => {
-                        if(ust.getAttribute("id") === "ustensils-"+normalizer(ustensile).split(" ").join("-")) {
-                            ust.classList.remove("nom-filtre-cacher");
-                            ust.classList.add("nom-filtre-afficher");
-                        }
-                    });
-                });
-                document.getElementById(platsCorrespondant.id).classList.remove("plat-cacher");
-                document.getElementById(platsCorrespondant.id).classList.add("plat-afficher");
+                document.getElementById(recettesCorrespondantes.id).classList.remove("recette-cacher");
+                document.getElementById(recettesCorrespondantes.id).classList.add("recette-afficher");
             });
-            /* Vérifie si un plat est affiché */
-            let nbPlats = resultatRecherche.length;
-            if(nbPlats === 0) {
+            /* Vérifie si une recette est affichée */
+            let nbRecettesAfficher = resultatRecherche.length;
+            if(nbRecettesAfficher === 0) {
                 document.getElementById("aucun-resultat").classList.add("aucun-resultat-afficher");
             } else {
                 document.getElementById("aucun-resultat").classList.remove("aucun-resultat-afficher");
             }
         } else {
-            listePlats.forEach(plat => {
-                plat.classList.remove("plat-cacher");
-                plat.classList.add("plat-afficher");
+            /* Affiche toutes les recettes et tous les filtres */
+            recettes.forEach(recette => {
+                recette.classList.remove("recette-cacher");
+                recette.classList.add("recette-afficher");
             });
             listeFiltres = document.querySelectorAll(".nom-filtre");
             listeFiltres.forEach(filtre => {
@@ -178,141 +346,3 @@ function rechercher(recipes) {
     });
 }
 rechercher(recipes);
-
-
-/** Ajoute le tag dans les tag choisis **/
-function ajouteTag(type, nom) {
-    let nomID = nom.split(" ").join("-");
-    document.getElementById("tags-choisis").insertAdjacentHTML("beforeend", `<span class="tag tag-${type}" id="tag-${type}-${nomID}">${nom}<i class="far fa-times-circle" onclick="supprimeTag('${type}', '${nom}')"></i></span>`);
-    let plats = document.querySelectorAll(".plat");
-    switch(type) {
-        case "ingredients":          
-            plats.forEach(function (plat) {
-                if(plat.classList.contains("ingredient-"+nom.split(" ").join("-"))) {
-                    if(plat.classList.contains("plat-afficher")) {
-                        document.getElementById(plat.id).classList.add("plat-afficher");
-                    }
-                } else {
-                    document.getElementById(plat.id).classList.remove("plat-afficher");
-                    document.getElementById(plat.id).classList.add("plat-cacher");
-                }
-            });
-            break;
-        case "appliance":
-            plats.forEach(function (plat) {
-                if(normalizer(plat.dataset.appliance) == nom) {
-                    if(plat.classList.contains("plat-afficher")) {
-                        document.getElementById(plat.id).classList.add("plat-afficher");
-                    }
-                } else {
-                    document.getElementById(plat.id).classList.remove("plat-afficher");
-                    document.getElementById(plat.id).classList.add("plat-cacher");
-                }
-            });
-            break;
-        case "ustensils":  
-            plats.forEach(function (plat) {
-                if(plat.classList.contains("ustensile-"+nom.split(" ").join("-"))) {
-                    if(plat.classList.contains("plat-afficher")) {
-                        document.getElementById(plat.id).classList.add("plat-afficher");
-                    }
-                } else {
-                    document.getElementById(plat.id).classList.remove("plat-afficher");
-                    document.getElementById(plat.id).classList.add("plat-cacher");
-                }
-            });
-            break;
-        default:
-            break;
-    }
-    /* Cache le tag si cliqué */
-    document.getElementById(type+"-"+nom.split(" ").join("-")).classList.add("tag-cacher");
-    /* Vérifie si un plat est affiché */
-    let nbPlats = document.querySelectorAll(".plat:not(.plat-cacher)").length;
-    if(nbPlats === 0) {
-        document.getElementById("aucun-resultat").classList.add("aucun-resultat-afficher");
-    } else {
-        document.getElementById("aucun-resultat").classList.remove("aucun-resultat-afficher");
-    }
-}
-/* Supprime le tag dans les tags choisis */
-function supprimeTag(type, nom) {
-    document.getElementById(type+"-"+nom.split(" ").join("-")).classList.remove("tag-cacher");
-    let plats = document.querySelectorAll(".plat");
-    plats.forEach(function (plat) {
-        if(!plat.classList.contains(type+"-"+nom.split(" ").join("-"))) {
-            plat.classList.remove("plat-cacher");
-        }
-    });
-    document.getElementById("tag-"+type+"-"+nom.split(" ").join("-")).remove();
-}
-
-/** Gère la barre de recherche dans les tags **/
-let champAppareils = document.querySelector('#champ-appareils');
-let tableauAppareils = [];
-let listeAppareils = document.querySelectorAll("[data-type='appliance']");
-listeAppareils.forEach(appareil => {
-    tableauAppareils.push(appareil.getAttribute("data-nom"));
-});
-function rechercherTag(type, tableauAppareils) {
-    /* Recherche si un tag correspond */
-    champAppareils.addEventListener("keyup", (e) => {
-        let rechercheValeur = normalizer(e.target.value);
-        if(rechercheValeur.length >= 1) {
-            let resultatRecherche = tableauAppareils.filter((app) => {
-                return(
-                    normalizer(app).includes(rechercheValeur)
-                );
-            });
-            listeAppareils.forEach(appareil => {
-                appareil.classList.remove("nom-filtre-afficher");
-                appareil.classList.add("nom-filtre-cacher");
-            });
-            resultatRecherche.forEach(tagCorrespondant => {
-                listeAppareils.forEach(appareil => {
-                    if(tagCorrespondant === appareil.getAttribute("data-nom")) {
-                        appareil.classList.remove("nom-filtre-cacher");
-                        appareil.classList.add("nom-filtre-afficher");
-                    }
-                });
-            });
-        } else {
-            listeAppareils.forEach(appareil => {
-                appareil.classList.remove("nom-filtre-cacher");
-                appareil.classList.add("nom-filtre-afficher");
-            });
-        }
-    })
-}
-rechercherTag("", tableauAppareils);
-
-/** Affiche les recettes **/
-function plat(id, nom, personne, ingredients, temps, description, appliance, ustensils) {
-    /* Récupère les plats et créer l'élément */
-    let listePlats = document.getElementById("liste-plats");
-    let recette = document.createElement("article");
-    recette.setAttribute("id", id);
-    recette.setAttribute("data-nom", `${nom}`);
-    recette.setAttribute("data-appliance", `${appliance}`);
-    recette.classList.add("plat");
-    ingredients.forEach(ingredient => recette.classList.add(normalizer("ingredient-"+ingredient.ingredient.split(" ").join("-"))));
-    ustensils.forEach(ustensil => recette.classList.add(normalizer("ustensile-"+ustensil.split(" ").join("-"))));
-    /* Créer le template */
-    let plat = `
-        <div class="image-plat"></div>
-        <div class="description-plat">
-            <h1 class="titre-plat">${nom}</h1>
-            <span class="temps-preparation">${temps}</span>
-            <div class="liste-ingredient">
-                ${ingredients.map(ingredient =>
-                    `<span class="type-ingredient">${ingredient.ingredient}<span class="nombre-ingredient">${ingredient.quantity || ''}${ingredient.quantite || ''} ${ingredient.unit || ''}</span></span>`
-                ).join(" ")}
-            </div>
-            <div class="recette">
-                <p>${description}</p>
-            </div>
-        </div>
-    `;
-    recette.innerHTML = plat;
-    listePlats.appendChild(recette);
-}

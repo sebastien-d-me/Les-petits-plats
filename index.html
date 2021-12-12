@@ -21,9 +21,9 @@
             </div>
         </form>
 
-        <div id="tags-choisis"></div>
+        <div id="filtres-choisis"></div>
 
-        <div id="filtre">
+        <div id="liste-filtres">
             <div class="type-filtre" id="ingredients">
                 <button class="btn-filtre" id="btn-ingredients" onclick="ouvreFiltre('ingredients')">Ingrédients<i class="fas fa-chevron-down chevron-filtre chevron-ferme-filtre"></i></button>
                 <div class="cherche-filtre" id="cherche-ingredients">
@@ -38,7 +38,7 @@
                 <button class="btn-filtre" id="btn-appareils" onclick="ouvreFiltre('appareils')">Appareils<i class="fas fa-chevron-down chevron-filtre chevron-ferme-filtre"></i></button>
                 <div class="cherche-filtre" id="cherche-appareils">
                     <form method="GET" action="#">
-                        <input type="text" class="champ-filtre" id="champ-appareils" placeholder="Rechercher un appareil"><i class="fas fa-chevron-up chevron-filtre chevron-ouvert-filtre" onclick="fermetureFiltre('appareils')"></i>
+                        <input type="text" class="champ-filtre" id="champ-appliance" placeholder="Rechercher un appareil"><i class="fas fa-chevron-up chevron-filtre chevron-ouvert-filtre" onclick="fermetureFiltre('appareils')"></i>
                     </form>
                     <ul class="liste-filtre" id="liste-filtre-appliance">
                     </ul>
@@ -48,7 +48,7 @@
                 <button class="btn-filtre" id="btn-ustensiles" onclick="ouvreFiltre('ustensiles')">Ustensiles<i class="fas fa-chevron-down chevron-filtre chevron-ferme-filtre"></i></button>
                 <div class="cherche-filtre" id="cherche-ustensiles">
                     <form method="GET" action="#">
-                        <input type="text" class="champ-filtre" id="champ-ustensiles" placeholder="Rechercher un ustensile"><i class="fas fa-chevron-up chevron-filtre chevron-ouvert-filtre" onclick="fermetureFiltre('ustensiles')"></i>
+                        <input type="text" class="champ-filtre" id="champ-ustensils" placeholder="Rechercher un ustensile"><i class="fas fa-chevron-up chevron-filtre chevron-ouvert-filtre" onclick="fermetureFiltre('ustensiles')"></i>
                     </form>
                     <ul class="liste-filtre" id="liste-filtre-ustensils">
                     </ul>
@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <div id="liste-plats">
+        <div id="liste-recettes">
             <span id="aucun-resultat">Aucune recette ne correspond à votre critère... vous pouvez chercher «tarte aux pommes», «poisson»,, etc.</span>
         </div>
     </main>
