@@ -155,31 +155,43 @@ function ajouteFiltre(type, nom) {
     switch(type) {
         case "ingredients":          
             recettes.forEach(function (recette) {
-                if(recette.classList.contains("ingredients-"+kebabCase(nom))) {
-                    document.getElementById(recette.id).classList.add("recette-afficher");
+                if(tableauRecherche == "") {
+                    if(recette.classList.contains("ingredients-"+kebabCase(nom))) {
+                        document.getElementById(recette.id).classList.add("recette-afficher");
+                    } else {
+                        document.getElementById(recette.id).classList.remove("recette-afficher");
+                        document.getElementById(recette.id).classList.add("recette-cacher");
+                    }
                 } else {
-                    document.getElementById(recette.id).classList.remove("recette-afficher");
-                    document.getElementById(recette.id).classList.add("recette-cacher");
+                    // Vérifier que cela inclut les deux champs
                 }
             });
             break;
         case "appliance":
             recettes.forEach(function (recette) {
-                if(normalizer(recette.dataset.appliance) === nom) {
-                    document.getElementById(recette.id).classList.add("recette-afficher");
+                if(tableauRecherche == "") {
+                    if(normalizer(recette.dataset.appliance) === nom) {
+                        document.getElementById(recette.id).classList.add("recette-afficher");
+                    } else {
+                        document.getElementById(recette.id).classList.remove("recette-afficher");
+                        document.getElementById(recette.id).classList.add("recette-cacher");
+                    }
                 } else {
-                    document.getElementById(recette.id).classList.remove("recette-afficher");
-                    document.getElementById(recette.id).classList.add("recette-cacher");
+                    // Vérifier que cela inclut les deux champs
                 }
             });
             break;
         case "ustensils":  
-        recettes.forEach(function (recette) {
-                if(recette.classList.contains("ustensile-"+kebabCase(nom))) {
-                    document.getElementById(recette.id).classList.add("recette-afficher");
+            recettes.forEach(function (recette) {
+                if(tableauRecherche == "") {
+                    if(recette.classList.contains("ustensile-"+kebabCase(nom))) {
+                        document.getElementById(recette.id).classList.add("recette-afficher");
+                    } else {
+                        document.getElementById(recette.id).classList.remove("recette-afficher");
+                        document.getElementById(recette.id).classList.add("recette-cacher");
+                    }
                 } else {
-                    document.getElementById(recette.id).classList.remove("recette-afficher");
-                    document.getElementById(recette.id).classList.add("recette-cacher");
+                    // Vérifier que cela inclut les deux champs
                 }
             });
             break;
@@ -286,22 +298,20 @@ function supprimeFiltre(type, nom) {
 /*** Gère la barre de recherche principale ***/
 /** Champ rechercher **/
 let champRechercher = document.querySelector('#champ-rechercher');
+let tableauRecherche = [];
 function rechercher(recipes) {
     /* Suit ce que l'utilisateur rentre */
     champRechercher.addEventListener("keyup", (e) => {
         let rechercheValeur = normalizer(e.target.value);
+        tableauRecherche = rechercheValeur;
         if(rechercheValeur.length >= 3) {
             let resultatRecherche = recipes.filter((recette) => {
                 return(
-                    normalizer(recette.name).includes(rechercheValeur),
-                    recette.ingredients.some((numIngredient) => normalizer(numIngredient.ingredient).includes(rechercheValeur)),
+                    normalizer(recette.name).includes(rechercheValeur) ||
+                    recette.ingredients.some((numIngredient) => normalizer(numIngredient.ingredient).includes(rechercheValeur)) ||
                     normalizer(recette.description).includes(rechercheValeur)
                 );
             });
-            /*tableauFiltresChoisis.forEach(item => {
-                item = item.split('_');
-                ajouteFiltre(item[0], item[1])
-            });/*
             /* Cache toutes les recettes */
             recettes.forEach(recette => {
                 recette.classList.remove("recette-afficher");
@@ -314,8 +324,8 @@ function rechercher(recipes) {
             /* Recherche si un nom, ingrédient, description correspond */
             resultatRecherche.forEach(recettesCorrespondantes => {
                 /* Affiche la recette */
-                    document.getElementById(recettesCorrespondantes.id).classList.remove("recette-cacher");
-                    document.getElementById(recettesCorrespondantes.id).classList.add("recette-afficher");
+                document.getElementById(recettesCorrespondantes.id).classList.remove("recette-cacher");
+                document.getElementById(recettesCorrespondantes.id).classList.add("recette-afficher");
                 /* Affiche les ingrédients correspondants */
                 recettesCorrespondantes.ingredients.map(ingredient => {
                     afficheFiltre(listeIngredients, "ingredients", ingredient.ingredient);
@@ -326,10 +336,7 @@ function rechercher(recipes) {
                 recettesCorrespondantes.ustensils.map(ustensile => {
                     afficheFiltre(listeUstensils, "ustensils", ustensile);
                 });
-                if(tableauFiltresChoisis.length === 0) {
-                    document.getElementById(recettesCorrespondantes.id).classList.remove("recette-cacher");
-                    document.getElementById(recettesCorrespondantes.id).classList.add("recette-afficher");
-                } else {
+                if(tableauFiltresChoisis.length !== 0) {
                     recettes.forEach(recette => {
                         tableauFiltresChoisis.forEach(item => {
                             if (recette.classList.contains(item) == true && recette.classList.contains("recette-afficher") == true) {
