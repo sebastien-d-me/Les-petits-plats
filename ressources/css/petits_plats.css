@@ -173,9 +173,6 @@ body {
 .nom-filtre-cacher {
   display: none;
 }
-.filtre-cacher {
-  display: none;
-}
 /* Ingrédients */
 #btn-ingredients,
 #cherche-ingredients,
