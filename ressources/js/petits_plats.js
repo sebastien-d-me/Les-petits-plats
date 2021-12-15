@@ -175,7 +175,7 @@ function ajouteFiltre(type, nom) {
                     tableauRechercheID.forEach(rechercheID => {
                         if(recette.id == rechercheID) {
                             tableauFiltresChoisis.forEach(item => {
-                                if (document.getElementById(recette.id).getAttribute("id") == item && recette.classList.contains("recette-afficher") === true) {
+                                if (document.getElementById(recette.id).classList.contains(item) === true && recette.classList.contains("recette-afficher") === true) {
                                     document.getElementById(recette.id).classList.remove("recette-cacher"); 
                                     document.getElementById(recette.id).classList.add("recette-afficher");
                                 } else {
@@ -217,7 +217,7 @@ function ajouteFiltre(type, nom) {
         case "ustensils":  
             recettes.forEach(function (recette) {
                 if(tableauRechercheID.length === 0) {
-                    if(recette.classList.contains("ustensile-"+kebabCase(nom))) {
+                    if(recette.classList.contains("ustensils-"+kebabCase(nom))) {
                         document.getElementById(recette.id).classList.add("recette-afficher");
                     } else {
                         document.getElementById(recette.id).classList.remove("recette-afficher");
