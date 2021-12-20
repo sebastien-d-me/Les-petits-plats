@@ -170,10 +170,13 @@ function ajouteFiltre(type, nom) {
     tableauFiltresChoisisID = [];
     tableauFiltresChoisis.push(type+"-"+nom);
     let nomID = kebabCase(nom);
-    document.getElementById("filtres-choisis").insertAdjacentHTML("beforeend", `<span class="filtre filtre-${type}" id="filtre-${type}-${nomID}">${nom}<i class="far fa-times-circle" onclick="supprimeFiltre('${type}', '${nom}')"></i></span>`);
+    let nomAfficher = nom.replaceAll("-", " ");
+    document.getElementById("filtres-choisis").insertAdjacentHTML("beforeend", `<span class="filtre filtre-${type}" id="filtre-${type}-${nomID}">${nomAfficher}<i class="far fa-times-circle" onclick="supprimeFiltre('${type}', '${nom}')"></i></span>`);
     let listeFiltresNom = document.querySelectorAll(".nom-filtre");
     switch(type) {
-        case "ingredients":          
+        /* Si le filtre est un ingrédient */
+        case "ingredients":
+            document.getElementById("champ-ingredients").value = "";          
             recettes.forEach(function (recette) {
                 if(tableauRechercheID.length === 0) {
                     if(recette.classList.contains("ingredients-"+kebabCase(nom))) {
@@ -187,7 +190,9 @@ function ajouteFiltre(type, nom) {
                 }
             });
             break;
+        /* Si le filtre est un appareil */
         case "appliance":
+            document.getElementById("champ-appliance").value = "";
             recettes.forEach(function (recette) {
                 if(tableauRechercheID.length === 0) {
                     if(recette.classList.contains("appliance-"+kebabCase(nom))) {
@@ -201,7 +206,9 @@ function ajouteFiltre(type, nom) {
                 }
             });
             break;
+        /* Si le filtre est un ustensile */
         case "ustensils":  
+            document.getElementById("champ-ustensils").value = "";
             recettes.forEach(function (recette) {
                 if(tableauRechercheID.length === 0) {
                     if(recette.classList.contains("ustensils-"+kebabCase(nom))) {
@@ -218,9 +225,6 @@ function ajouteFiltre(type, nom) {
         default:
             break;
     }
-    /* Ajoute les recettes dans un tableau */
-    /* Cache le filtre si cliqué */
-    document.getElementById(type+"-"+kebabCase(nom)).classList.remove("nom-filtre-afficher");
     /* Vérifie si une recette est affichée */
     let recettesAfficher = document.querySelectorAll(".recette:not(.recette-cacher)");
     recettesAfficher.forEach(recetteAfficher => {
@@ -243,6 +247,10 @@ function ajouteFiltre(type, nom) {
     } else {
         document.getElementById("aucun-resultat").classList.remove("aucun-resultat-afficher");
     }
+    /* Cache le filtre si cliqué */
+    document.getElementById(type+"-"+nom).classList.remove("nom-filtre-afficher");
+    document.getElementById(type+"-"+nom).classList.add("nom-filtre-cacher-choisis");
+    document.getElementById(type+"-"+nom).style.display = "none";
 }
 
 /** Gère la barre de recherche dans les filtres **/
@@ -272,26 +280,62 @@ function rechercherFiltre(type, tableau) {
                     normalizer(app).includes(rechercheValeur)
                 );
             });
-            /* Cache les filtres */
-            listeType.forEach(element => {
-                element.classList.remove("nom-filtre-afficher");
-                element.classList.add("nom-filtre-cacher");
-            });
-            /* Affiche ceux correspondant à la recherche */
-            resultatRecherche.forEach(filtreCorrespondant => {
+            /* Si aucun filtre n'a été choisi ni de recherche */
+            if(tableauFiltresChoisis.length === 0 && tableauRechercheID.length === 0) {
+                /* Cache les filtres */
                 listeType.forEach(element => {
-                    if(filtreCorrespondant === element.getAttribute("data-nom")) {
-                        element.classList.remove("nom-filtre-cacher");
-                        element.classList.add("nom-filtre-afficher");
-                    }
+                    element.classList.remove("nom-filtre-afficher");
+                    element.classList.add("nom-filtre-cacher");
+                    element.style.display = "none";
                 });
-            });
+                /* Affiche ceux correspondant à la recherche */
+                resultatRecherche.forEach(filtreCorrespondant => {
+                    listeType.forEach(element => {
+                        if(filtreCorrespondant === element.getAttribute("data-nom")) {
+                            element.classList.remove("nom-filtre-cacher");
+                            element.classList.add("nom-filtre-afficher");
+                            element.style.display = "block";
+                        }
+                    });
+                });
+            } else {
+                listeType.forEach(element => {
+                    element.classList.remove("nom-filtre-afficher");
+                    element.classList.add("nom-filtre-cacher");
+                    element.style.display = "none";
+                });
+                resultatRecherche.forEach(filtreCorrespondant => {
+                    let classe = type+"-"+normalizer(kebabCase(filtreCorrespondant));
+                    recettes.forEach(function (recette) {
+                        if(recette.classList.contains("recette-afficher") && recette.classList.contains(classe)) {
+                            document.getElementById(classe).classList.add("nom-filtre-afficher");
+                            document.getElementById(classe).style.display = "block";
+                        }
+                    });
+                });
+            }
         /* Sinon ré-affiche les filtres */
         } else {
-            listeType.forEach(element => {
-                element.classList.remove("nom-filtre-cacher");
-                element.classList.add("nom-filtre-afficher");
-            });
+            if(tableauFiltresChoisis.length === 0 && tableauRechercheID.length === 0) {
+                listeType.forEach(element => {
+                    element.classList.remove("nom-filtre-cacher");
+                    element.classList.add("nom-filtre-afficher");
+                    element.style.display = "block";
+                });
+            } else {
+                recettes.forEach(function (recette) {
+                    recette.classList.forEach(classe => {
+                        if(recette.classList.contains("recette-afficher")) {
+                            if(classe !== "recette") {
+                                if(document.getElementById(classe) !== null) {
+                                    document.getElementById(classe).classList.add("nom-filtre-afficher");
+                                    document.getElementById(classe).style.display = "block";
+                                }
+                            }
+                        }
+                    });
+                });
+            }
         }
     })
 }
@@ -330,6 +374,7 @@ function verifierFiltres(recette) {
 /** Supprime le filtre des choisis **/
 function supprimeFiltre(type, nom) {
     document.getElementById(type+"-"+kebabCase(nom)).classList.remove("filtre-cacher");
+    document.getElementById(type+"-"+nom).classList.remove("nom-filtre-cacher-choisis");
     document.getElementById("filtre-"+type+"-"+kebabCase(nom)).remove();
     tableauFiltresChoisis = tableauFiltresChoisis.filter(item => item !== type+"-"+kebabCase((nom)))
     recettes.forEach(function (recette) {

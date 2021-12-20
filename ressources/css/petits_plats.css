@@ -61,6 +61,8 @@ body {
   margin: 0 10px 10px 0;
   padding: 10px 20px;
   position: relative;
+}
+.filtre:first-letter {
   text-transform: capitalize;
 }
 .fa-times-circle {
@@ -82,7 +84,6 @@ body {
 .type-filtre {
   border-radius: 5px;
   display: flex;
-  width: fit-content;
 }
 /* Boutons */
 .btn-filtre {
@@ -95,7 +96,7 @@ body {
   padding: 0 10px;
   position: relative;
   text-align: left;
-  width: 200px;
+  width: 250px;
 }
 .btn-filtre:hover {
   cursor: pointer;
@@ -125,6 +126,7 @@ body {
   display: none;
   flex-direction: column;
   margin-right: 20px;
+  min-width: 250px;
   padding: 0 10px;
   width: 100%;
 }
@@ -142,13 +144,13 @@ body {
   border-color: transparent;
   border-radius: 5px;
   box-sizing: border-box;
+  color: #ffffff;
+  font-size: 15px;
   height: 65px;
   width: 100%;
 }
 .champ-filtre::placeholder {
   color: #ffffff;
-  font-size: 15px;
-  font-weight: bold;
 }
 /* Liste des filtres */
 .liste-filtre {
@@ -172,6 +174,9 @@ body {
 }
 .nom-filtre-cacher {
   display: none;
+}
+.nom-filtre-cacher-choisis {
+  display: none !important;
 }
 /* Ingrédients */
 #btn-ingredients,
