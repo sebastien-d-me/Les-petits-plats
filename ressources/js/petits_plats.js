@@ -146,23 +146,6 @@ function fermetureFiltre(type) {
     chercheType.classList.add("cherche-filtre-cacher");
 }
 
-/** Affichage filtres / recherche **/
-function affichageFiltresRecherche(id) {
-    tableauRechercheID.forEach(rechercheID => {
-        if(id === rechercheID.toString()) {
-            tableauFiltresChoisis.forEach(item => {
-                if (document.getElementById(id).classList.contains(item) && recette.classList.contains("recette-afficher")) {
-                    document.getElementById(id).classList.remove("recette-cacher"); 
-                    document.getElementById(id).classList.add("recette-afficher");
-                } else {
-                    document.getElementById(id).classList.remove("recette-afficher");
-                    document.getElementById(id).classList.add("recette-cacher");
-                }
-            });   
-        }
-    });
-}
-
 /** Ajoute le filtre des choisis **/
 let tableauFiltresChoisis = [];
 let tableauFiltresChoisisID = [];
@@ -186,16 +169,15 @@ function ajouteFiltre(type, nom) {
                         document.getElementById(recette.id).classList.add("recette-cacher");
                     }
                 } else {
-                    /*affichageFiltresRecherche(recette.id);*/
                     tableauRechercheID.forEach(rechercheID => {
                         if(recette.id === rechercheID.toString()) {
                             tableauFiltresChoisis.forEach(item => {
-                                if (document.getElementById(id).classList.contains(item) && recette.classList.contains("recette-afficher")) {
-                                    document.getElementById(id).classList.remove("recette-cacher"); 
-                                    document.getElementById(id).classList.add("recette-afficher");
+                                if (document.getElementById(recette.id).classList.contains(item) && recette.classList.contains("recette-afficher")) {
+                                    document.getElementById(recette.id).classList.remove("recette-cacher"); 
+                                    document.getElementById(recette.id).classList.add("recette-afficher");
                                 } else {
-                                    document.getElementById(id).classList.remove("recette-afficher");
-                                    document.getElementById(id).classList.add("recette-cacher");
+                                    document.getElementById(recette.id).classList.remove("recette-afficher");
+                                    document.getElementById(recette.id).classList.add("recette-cacher");
                                 }
                             });   
                         }
@@ -215,7 +197,19 @@ function ajouteFiltre(type, nom) {
                         document.getElementById(recette.id).classList.add("recette-cacher");
                     }
                 } else {
-                    affichageFiltresRecherche(recette.id);
+                    tableauRechercheID.forEach(rechercheID => {
+                        if(recette.id === rechercheID.toString()) {
+                            tableauFiltresChoisis.forEach(item => {
+                                if (document.getElementById(recette.id).classList.contains(item) && recette.classList.contains("recette-afficher")) {
+                                    document.getElementById(recette.id).classList.remove("recette-cacher"); 
+                                    document.getElementById(recette.id).classList.add("recette-afficher");
+                                } else {
+                                    document.getElementById(recette.id).classList.remove("recette-afficher");
+                                    document.getElementById(recette.id).classList.add("recette-cacher");
+                                }
+                            });   
+                        }
+                    });;
                 }
             });
             break;
@@ -231,7 +225,19 @@ function ajouteFiltre(type, nom) {
                         document.getElementById(recette.id).classList.add("recette-cacher");
                     }
                 } else {
-                    affichageFiltresRecherche(recette.id);
+                    tableauRechercheID.forEach(rechercheID => {
+                        if(recette.id === rechercheID.toString()) {
+                            tableauFiltresChoisis.forEach(item => {
+                                if (document.getElementById(recette.id).classList.contains(item) && recette.classList.contains("recette-afficher")) {
+                                    document.getElementById(recette.id).classList.remove("recette-cacher"); 
+                                    document.getElementById(recette.id).classList.add("recette-afficher");
+                                } else {
+                                    document.getElementById(recette.id).classList.remove("recette-afficher");
+                                    document.getElementById(recette.id).classList.add("recette-cacher");
+                                }
+                            });   
+                        }
+                    });
                 }
             });
             break;
