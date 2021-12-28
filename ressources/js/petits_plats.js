@@ -635,44 +635,54 @@ function rechercher(recipes) {
             tableauRechercheID = [];
             tableauRechercheID.push("VIDE");
             if(tableauFiltresChoisis.length === 0) { 
-                recettes.forEach(recette => {
-                    recette.classList.remove("recette-cacher");
-                });
-                document.querySelectorAll(".nom-filtre").forEach(filtre => {
-                    filtre.classList.remove("nom-filtre-afficher");
-                    filtre.classList.remove("nom-filtre-cacher");
-                    filtre.style.display = "block";
-                });
+                let recette = document.getElementsByClassName("recette");
+                for(let indexRecettes = 0; indexRecettes < recette.length; indexRecettes++) {
+                    recette[indexRecettes].classList.remove("recette-cacher");
+                }
+                let listeFiltres = document.getElementsByClassName("nom-filtre");
+                for(let indexNomFiltres = 0; indexNomFiltres < listeFiltres.length; indexNomFiltres++) {
+                    let idNomFiltre = listeFiltres[indexNomFiltres].getAttribute("id");
+                    document.getElementById(idNomFiltre).classList.remove("nom-filtre-afficher");
+                    document.getElementById(idNomFiltre).classList.remove("nom-filtre-cacher");
+                    document.getElementById(idNomFiltre).classList.add("nom-filtre-afficher");
+                    document.getElementById(idNomFiltre).style.display = "block";
+                }
             /* Pareil mais avec les filtres choisis */
             } else {
-                recettes.forEach(recette => {
-                    if(verifierFiltres(recette) === true) {
-                        recette.classList.remove("recette-cacher"); 
-                        recette.classList.add("recette-afficher");
-                        tableauFiltresChoisis.forEach(item => {
-                            if (recette.classList.contains(item) && recette.classList.contains("recette-afficher")) {
-                                recette.classList.remove("recette-cacher"); 
-                                recette.classList.add("recette-afficher");
-                            } else {
-                                recette.classList.remove("recette-afficher");
-                                recette.classList.add("recette-cacher");
+                let recette = document.getElementsByClassName("recette");
+                for(let indexRecettes = 0; indexRecettes < recette.length; indexRecettes++) {
+                    if(verifierFiltres(recette[indexRecettes]) === true) {
+                        recette[indexRecettes].classList.remove("recette-cacher"); 
+                        recette[indexRecettes].classList.add("recette-afficher");
+                        /* Affiche la recette si une correspondance recherche filtre est trouvé */
+                        for (let index = 0; index < recipes.length; index++) {
+                            for(let indexFiltres = 0; indexFiltres < tableauFiltresChoisis.length; indexFiltres++) {
+                                if (document.getElementById(recipes[index]["id"]).classList.contains(tableauFiltresChoisis[indexFiltres]) && document.getElementById(recipes[index]["id"]).classList.contains("recette-afficher")) {
+                                    document.getElementById(recipes[index]["id"]).classList.remove("recette-cacher"); 
+                                    document.getElementById(recipes[index]["id"]).classList.add("recette-afficher");
+                                } else {
+                                    document.getElementById(recipes[index]["id"]).classList.remove("recette-afficher");
+                                    document.getElementById(recipes[index]["id"]).classList.add("recette-cacher");
+                                }
                             }
-                        });
-                        recette.classList.forEach(classe => {
-                            if(recette.classList.contains("recette-afficher")) {
-                                if(classe !== "recette") {
-                                    if(document.getElementById(classe) !== null) {
-                                        document.getElementById(classe).classList.add("nom-filtre-afficher");
-                                        document.getElementById(classe).style.display = "block";
+                        }
+                        /* Affiche les noms des filtres correspondants */
+                        let classeRecette = recette[indexRecettes].classList;
+                        if(classeRecette.contains("recette-afficher")) {
+                            for(let indexClasse = 0; indexClasse < classeRecette.length; indexClasse++) {
+                                if(classeRecette[indexClasse] !== "recette") {
+                                    if(document.getElementById(classeRecette[indexClasse]) !== null) {
+                                        document.getElementById(classeRecette[indexClasse]).classList.add("nom-filtre-afficher");
+                                        document.getElementById(classeRecette[indexClasse]).style.display = "block";
                                     }
                                 }
                             }
-                        });
+                        }
                     } else {
-                        recette.classList.remove("recette-afficher");
-                        recette.classList.add("recette-cacher");
+                        recette[indexRecettes].classList.remove("recette-afficher");
+                        recette[indexRecettes].classList.add("recette-cacher");
                     }
-                });
+                }
             }
         }
     });
