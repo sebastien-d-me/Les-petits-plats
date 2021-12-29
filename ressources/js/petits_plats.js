@@ -626,6 +626,14 @@ function rechercher(recipes) {
                 if(nbRecettesAfficher === 0) {
                     document.getElementById("aucun-resultat").classList.add("aucun-resultat-afficher");
                     tableauRechercheID.push("AUCUN");
+                    let listeFiltres = document.getElementsByClassName("nom-filtre");
+                    for(let indexNomFiltres = 0; indexNomFiltres < listeFiltres.length; indexNomFiltres++) {
+                        let idNomFiltre = listeFiltres[indexNomFiltres].getAttribute("id");
+                        document.getElementById(idNomFiltre).classList.remove("nom-filtre-afficher");
+                        document.getElementById(idNomFiltre).classList.remove("nom-filtre-cacher");
+                        document.getElementById(idNomFiltre).classList.add("nom-filtre-cacher");
+                        document.getElementById(idNomFiltre).style.display = "none";
+                    }
                 } else {
                     document.getElementById("aucun-resultat").classList.remove("aucun-resultat-afficher");
                 }
