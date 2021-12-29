@@ -608,6 +608,12 @@ function rechercher(recipes) {
             if(nbRecettesAfficher === 0) {
                 document.getElementById("aucun-resultat").classList.add("aucun-resultat-afficher");
                 tableauRechercheID.push("AUCUN");
+                document.querySelectorAll(".nom-filtre").forEach(filtre => {
+                    filtre.classList.remove("nom-filtre-afficher");
+                    filtre.classList.remove("nom-filtre-cacher");
+                    filtre.classList.add("nom-filtre-cacher");
+                    filtre.style.display = "none";
+                });
             } else {
                 document.getElementById("aucun-resultat").classList.remove("aucun-resultat-afficher");
             }
