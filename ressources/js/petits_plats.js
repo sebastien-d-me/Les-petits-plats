@@ -604,7 +604,7 @@ function rechercher(recipes) {
                 }
             });
             /* Vérifie si une recette est affichée */
-            let nbRecettesAfficher = resultatRecherche.length;
+            let nbRecettesAfficher = document.querySelectorAll(".recette-afficher").length;
             if(nbRecettesAfficher === 0) {
                 document.getElementById("aucun-resultat").classList.add("aucun-resultat-afficher");
                 tableauRechercheID.push("AUCUN");
