@@ -2,7 +2,7 @@
 ## Projet 7 - Les petits plats
 ------------
 ### Description du projet
-Ce projet est le n°7 du parcours [Développeur d'application - JavaScript React](https://openclassrooms.com/fr/paths/516-developpeur-dapplication-javascript-react "Développeur d'application - JavaScript React") qui consiste à créer un moteur de recherche en HTML/CSS/JS.
+Ce projet est le n°7 du parcours [**Développeur Front-End**](https://openclassrooms.com/fr/paths/314-developpeur-front-end "Développeur Front-End") qui consiste à créer un moteur de recherche en HTML/CSS/JS.
 ### Cahiers des charges
 ##### Spécifications fonctionnelles
 1. Gérer dynamiquement les recettes et les filtres sur le site.
