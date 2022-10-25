@@ -5,6 +5,12 @@ body {
   padding: 0;
 }
 
+/** Fonts **/
+@font-face {
+    font-family: "Lato";
+    src: url("../fonts/Lato/Lato-Regular.ttf");
+}
+
 /** Contenu **/
 * {
   font-family: "Lato", sans-serif;
