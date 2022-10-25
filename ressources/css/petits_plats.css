@@ -49,8 +49,34 @@ body {
   transform: translateY(-50%);
 }
 
-/** Filtres **/
-#filtre {
+/** Filtres choisis **/
+/* Filtre */
+.filtre {
+  border-radius: 5px;
+  color: #ffffff;
+  display: inline-block;
+  line-height: 30px;
+  min-height: 30px;
+  min-width: 100px;
+  margin: 0 10px 10px 0;
+  padding: 10px 20px;
+  position: relative;
+}
+.filtre:first-letter {
+  text-transform: capitalize;
+}
+.fa-times-circle {
+  float: right;
+  height: 30px;
+  line-height: 30px;
+  margin-left: 10px;
+}
+.fa-times-circle:hover {
+  cursor: pointer;
+}
+
+/** Liste des filtres **/
+#liste-filtres {
   display: flex;
   margin: 20px 0;
 }
@@ -58,7 +84,6 @@ body {
 .type-filtre {
   border-radius: 5px;
   display: flex;
-  width: fit-content;
 }
 /* Boutons */
 .btn-filtre {
@@ -71,10 +96,16 @@ body {
   padding: 0 10px;
   position: relative;
   text-align: left;
-  width: 200px;
+  width: 250px;
 }
 .btn-filtre:hover {
   cursor: pointer;
+}
+.btn-afficher {
+  display: block;
+}
+.btn-cacher {
+  display: none;
 }
 /* Chevron */
 .chevron-filtre {
@@ -95,24 +126,31 @@ body {
   display: none;
   flex-direction: column;
   margin-right: 20px;
+  min-width: 250px;
   padding: 0 10px;
   width: 100%;
 }
 .cherche-filtre > form {
   position: relative;
 }
+.cherche-filtre-cacher {
+  display: none;
+}
+.cherche-filtre-afficher {
+  display: flex;
+}
 /* Champs des filtres */
 .champ-filtre {
   border-color: transparent;
   border-radius: 5px;
   box-sizing: border-box;
+  color: #ffffff;
+  font-size: 15px;
   height: 65px;
   width: 100%;
 }
 .champ-filtre::placeholder {
   color: #ffffff;
-  font-size: 15px;
-  font-weight: bold;
 }
 /* Liste des filtres */
 .liste-filtre {
@@ -128,61 +166,102 @@ body {
 .nom-filtre:hover {
   cursor: pointer;
 }
+.nom-filtre:first-letter {
+  text-transform: capitalize;
+}
+.nom-filtre-afficher {
+  display: block;
+}
+.nom-filtre-cacher {
+  display: none;
+}
+.nom-filtre-cacher-choisis {
+  display: none !important;
+}
 /* Ingrédients */
 #btn-ingredients,
 #cherche-ingredients,
-#champ-ingredients {
+#champ-ingredients,
+.filtre-ingredients {
   background-color: #3282f7;
 }
 /* Appareils */
 #btn-appareils,
 #cherche-appareils,
-#champ-appareils {
+#champ-appliance,
+.filtre-appliance {
   background-color: #68d9a4;
 }
 /* Ustensiles */
 #btn-ustensiles,
 #cherche-ustensiles,
-#champ-ustensiles {
+#champ-ustensils,
+.filtre-ustensils {
   background-color: #ed6454;
-  margin-right: unset;
 }
 
-/** Plats **/
-/* Liste des plats */
-#liste-plats {
+/** Recettes **/
+/* Aucun résultat */
+#aucun-resultat {
+  display: none;
+  font-size: 20px;
+  text-align: center;
+  width: 100%;
+}
+.aucun-resultat-afficher {
+  display: block !important;
+}
+/* Liste des recettes */
+#liste-recettes {
   display: flex;
   flex-wrap: wrap;
   gap: 50px;
 }
-.plat {
+.recette {
   background-color: #e7e7e7;
   border-radius: 0 0 5px 5px;
   flex: 1 0 calc((100% - 100px) / 3);
+  max-width: calc((100% - 100px) / 3);
+  padding-bottom: 15px;
 }
-/* Image plat */
-.image-plat {
+.recette-afficher {
+  display: block;
+}
+.recette-cacher {
+  display: none;
+}
+/* Image recette */
+.image-recette {
   background-color: #c7bebe;
+  background-image: url("../img/Logo.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
   border-radius: 5px 5px 0 0;
   height: 200px;
 }
-/* Description du plat */
-.description-plat {
+/* Contenu de la recette */
+.contenu-recette {
   background-color: #e7e7e7;
   border-radius: 0 0 5px 5px;
   padding: 20px;
 }
-/* Titre du plat */
-.titre-plat {
-  display: inline;
+/* Titre du recette */
+.titre-recette {
+  display: inline-block;
   font-size: 20px;
   margin: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: calc(100% - 40px - 25%);
 }
 /* Temps de préparation */
 .temps-preparation {
   float: right;
   font-size: 20px;
   font-weight: bold;
+  width: 25%;
 }
 .temps-preparation::before {
   content: "\f017";
@@ -198,50 +277,58 @@ body {
 .liste-ingredient {
   float: left;
   margin: 20px 10px 0 0;
+  width: calc(50% - 10px);
 }
-/* Type d'ingrédient */
 .type-ingredient {
   display: block;
   font-weight: bold;
 }
-/* Quantité d'ingrédient */
 .nombre-ingredient {
   font-weight: normal;
 }
 .nombre-ingredient::before {
   content: " : ";
 }
-/* Recette */
-.recette > p {
-  display: flex;
+/* Description de la recette */
+.description-recette {
+  float: right;
+  width: 50%;
+}
+.description-recette > p {
+  display: -webkit-box;
   margin: 20px 0 0 0;
+  overflow: hidden;
   text-align: justify;
   text-overflow: ellipsis;
+  width: 100%;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
 }
 
 /** Responsive **/
 /* 1600 */
-@media screen and (max-width: 1600px) {
-  /** Base **/
+@media screen and (max-width: 1650px) {
   html,
   body {
     margin: 20px 50px;
   }
-  /** Plats **/
-  /* Liste d'ingrédient */
-  .liste-ingredient {
-    float: unset;
-  }
-  /* Titre du plat */
-  .titre-plat {
+  .titre-recette {
     font-size: 18px;
+    float: unset;
+    width: unset;
   }
-  /* Temps de préparation */
   .temps-preparation {
     font-size: 16px;
+    width: unset;
   }
   .temps-preparation::before {
     font-size: 15px;
+  }
+  .liste-ingredient {
+    width: 100%;
+  }
+  .description-recette {
+    width: 100%;
   }
 }
 /* 1400 */
@@ -251,113 +338,104 @@ body {
   body {
     margin: 20px 25px;
   }
-  /** Plats **/
-  /* Titre du plat */
-  .titre-plat {
+  .titre-recette {
     font-size: 16px;
   }
-  /* Temps de préparation */
   .temps-preparation {
     font-size: 15px;
   }
   .temps-preparation::before {
     font-size: 14px;
   }
-  /* Type d'ingrédient */
   .type-ingredient {
     font-size: 14px;
   }
-  /* Recette */
-  .recette > p {
+  .description-recette > p {
     font-size: 14px;
   }
 }
 /* 1250 */
 @media screen and (max-width: 1250px) {
-  /** Base **/
   html,
   body {
     margin: 20px 10px;
   }
-  /** Plats **/
-  /* Liste des plats */
-  #liste-plats {
+  #liste-recettes {
     gap: 25px;
   }
-  .plat {
-    flex: 1 0 calc((100% - 100px) / 2);
-  }
-  /* Titre du plat */
-  .titre-plat {
+  .titre-recette {
+    display: block;
     font-size: 20px;
   }
-  /* Temps de préparation */
   .temps-preparation {
+    display: block;
+    float: unset;
     font-size: 18px;
+    margin-top: 5px;
   }
   .temps-preparation::before {
     font-size: 17px;
   }
-  /* Type d'ingrédient */
   .type-ingredient {
     font-size: 16px;
   }
-  /* Recette */
-  .recette > p {
+  .recette {
+    flex: 1 0 calc((100% - 100px) / 2);
+    max-width: 100%;
+  }
+  .description-recette > p {
     font-size: 16px;
   }
 }
 /* 992 */
 @media screen and (max-width: 992px) {
-  /** Filtres **/
-  #filtre {
+  .filtre {
+    margin: 5px 0;
+    text-align: center;
+    width: calc(100% - 40px);
+  }
+  .fa-times-circle {
+    display: block;
+    float: unset;
+    font-size: 22px;
+    margin: auto;
+  }
+  #liste-filtres {
     justify-content: center;
   }
-  /* Cherche dans les filtres */
   .cherche-filtre {
     margin-right: 0;
     width: auto;
   }
-  /** Plats **/
-  /* Liste des plats */
-  #liste-plats {
+  #liste-recettes {
     gap: 25px 0;
   }
-  .plat {
+  .recette {
     flex: 1 0 calc((100% - 100px) / 1);
   }
 }
 /* 850 */
 @media screen and (max-width: 850px) {
-  /** Formulaire **/
-  /* Rechercher */
   #champ-rechercher {
     font-size: 16px;
   }
-  /** Filtres **/
-  #filtre {
+  #liste-filtres {
     flex-direction: column;
   }
-  /* Type de filtre */
   .type-filtre {
     display: block;
     margin: 10px auto;
     width: fit-content;
   }
-  /* Boutons */
   .btn-filtre {
     margin-right: unset;
   }
 }
 /* 600 */
 @media screen and (max-width: 600px) {
-  /** Header **/
-  /* Logo */
   .logo {
     width: 268px;
   }
-  /** Formulaire **/
-  /* Rechercher */
   #champ-rechercher {
     font-size: 14px;
   }
@@ -370,16 +448,8 @@ body {
 }
 /* 425 */
 @media screen and (max-width: 425px) {
-  /** Base **/
   html,
   body {
     margin: 20px 5px;
-  }
-  /** Plats **/
-  /* Temps de préparation */
-  .temps-preparation {
-    display: block;
-    float: unset;
-    margin-top: 5px;
   }
 }
