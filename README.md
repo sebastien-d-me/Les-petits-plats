@@ -22,4 +22,4 @@ Ce projet est le n°7 du parcours [**Développeur Front-End**](https://openclass
 
 ### Informations complémentaires
 - Soutenance validé le 11/01/2022.
-- Lien vers le site : [Cliquez-ici](https://sebastien-d-me.github.io/SebastienDelahaye_7_17112021/ "Cliquez-ici").
+- Lien vers le site : [Cliquez-ici](https://sebastien-d-me.github.io/Les-petits-plats/ "Cliquez-ici").
