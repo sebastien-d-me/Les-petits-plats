@@ -1,3 +1,5 @@
+<meta property="og:image" content="https://raw.githubusercontent.com/sebastien-d-me/Les-petits-plats/main/ressources/img/Logo.png">
+
 # Formation Développeur Front-End
 ## Projet 7 - Les petits plats
 ------------
